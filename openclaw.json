@@ -1,0 +1,472 @@
+{
+  "meta": {
+    "lastTouchedVersion": "2026.1.29",
+    "lastTouchedAt": "2026-02-19T09:53:30.670Z"
+  },
+  "wizard": {
+    "lastRunAt": "2026-01-30T18:00:07.950Z",
+    "lastRunVersion": "2026.1.29",
+    "lastRunCommand": "onboard",
+    "lastRunMode": "local"
+  },
+  "update": {
+    "channel": "stable"
+  },
+  "auth": {
+    "profiles": {
+      "openrouter:default": {
+        "provider": "openrouter",
+        "mode": "api_key"
+      }
+    }
+  },
+  "models": {
+    "mode": "merge",
+    "providers": {
+      "openrouter": {
+        "baseUrl": "https://openrouter.ai/api/v1",
+        "api": "openai-completions",
+        "models": [
+          {
+            "id": "auto",
+            "name": "OpenRouter Auto",
+            "reasoning": false,
+            "input": [
+              "text"
+            ],
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0
+            },
+            "contextWindow": 200000,
+            "maxTokens": 8192
+          },
+          {
+            "id": "openai/gpt-4o-mini",
+            "name": "OpenAI GPT-4o Mini (OpenRouter)",
+            "reasoning": false,
+            "input": [
+              "text"
+            ],
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0
+            },
+            "contextWindow": 128000,
+            "maxTokens": 8192
+          },
+          {
+            "id": "anthropic/claude-3.5-sonnet",
+            "name": "Anthropic Claude 3.5 Sonnet (OpenRouter)",
+            "reasoning": false,
+            "input": [
+              "text"
+            ],
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0
+            },
+            "contextWindow": 200000,
+            "maxTokens": 8192
+          },
+          {
+            "id": "anthropic/claude-3-opus",
+            "name": "Anthropic Claude 3 Opus (OpenRouter)",
+            "reasoning": false,
+            "input": [
+              "text"
+            ],
+            "cost": {
+              "input": 0,
+              "output": 0,
+              "cacheRead": 0,
+              "cacheWrite": 0
+            },
+            "contextWindow": 200000,
+            "maxTokens": 8192
+          }
+        ]
+      }
+    }
+  },
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "openrouter/auto"
+      },
+      "models": {
+        "openrouter/auto": {
+          "alias": "OpenRouter"
+        },
+        "openrouter/openai/gpt-4o-mini": {
+          "alias": "OpenRouter 4o-mini"
+        },
+        "openrouter/anthropic/claude-3.5-sonnet": {
+          "alias": "Claude 3.5 Sonnet"
+        },
+        "openrouter/anthropic/claude-3-opus": {
+          "alias": "Claude 3 Opus"
+        }
+      },
+      "workspace": "/Users/bilal/.openclaw/workspace",
+      "compaction": {
+        "mode": "safeguard"
+      },
+      "maxConcurrent": 4,
+      "subagents": {
+        "maxConcurrent": 8
+      }
+    },
+    "list": [
+      {
+        "id": "main",
+        "default": false,
+        "name": "Personal Assistant",
+        "workspace": "/Users/bilal",
+        "tools": {
+          "exec": {
+            "host": "gateway",
+            "security": "full",
+            "ask": "off"
+          }
+        },
+        "identity": {
+          "name": "Personal Assistant"
+        }
+      },
+      {
+        "id": "personal-assistant",
+        "default": true,
+        "name": "Personal Assistant",
+        "workspace": "/Users/bilal",
+        "agentDir": "/Users/bilal/.openclaw/agents/personal-assistant/agent",
+        "model": "openrouter/auto",
+        "identity": {
+          "name": "Personal Assistant"
+        },
+        "tools": {
+          "exec": {
+            "host": "gateway",
+            "security": "full",
+            "ask": "off"
+          }
+        }
+      },
+      {
+        "id": "operator",
+        "default": false,
+        "name": "Operator",
+        "workspace": "/Users/bilal/.openclaw/agents/operator/workspace",
+        "agentDir": "/Users/bilal/.openclaw/agents/operator/agent",
+        "model": "openrouter/openai/gpt-4o-mini",
+        "identity": {
+          "name": "Operator"
+        },
+        "tools": {
+          "exec": {
+            "host": "gateway",
+            "security": "full",
+            "ask": "off"
+          }
+        }
+      },
+      {
+        "id": "orchestrator",
+        "default": false,
+        "name": "Orchestrator",
+        "workspace": "/Users/bilal/.openclaw/agents/orchestrator/workspace",
+        "agentDir": "/Users/bilal/.openclaw/agents/orchestrator/agent",
+        "model": "openrouter/anthropic/claude-3.5-sonnet",
+        "identity": {
+          "name": "Orchestrator"
+        },
+        "tools": {
+          "exec": {
+            "host": "gateway",
+            "security": "full",
+            "ask": "off"
+          },
+          "deny": [
+            "message"
+          ]
+        }
+      },
+      {
+        "id": "orchestrator-opus",
+        "default": false,
+        "name": "Orchestrator Opus",
+        "workspace": "/Users/bilal/.openclaw/agents/orchestrator/workspace",
+        "agentDir": "/Users/bilal/.openclaw/agents/orchestrator-opus/agent",
+        "model": "openrouter/anthropic/claude-3-opus",
+        "identity": {
+          "name": "Orchestrator Opus"
+        },
+        "tools": {
+          "exec": {
+            "host": "gateway",
+            "security": "full",
+            "ask": "off"
+          },
+          "deny": [
+            "message"
+          ]
+        }
+      },
+      {
+        "id": "researcher-browser",
+        "default": false,
+        "name": "Researcher Browser",
+        "workspace": "/Users/bilal/.openclaw/agents/researcher-browser/workspace",
+        "agentDir": "/Users/bilal/.openclaw/agents/researcher-browser/agent",
+        "model": "openrouter/openai/gpt-4o-mini",
+        "identity": {
+          "name": "Researcher Browser"
+        },
+        "tools": {
+          "exec": {
+            "host": "gateway",
+            "security": "full",
+            "ask": "off"
+          },
+          "deny": [
+            "write",
+            "edit",
+            "message"
+          ]
+        }
+      },
+      {
+        "id": "researcher-social",
+        "default": false,
+        "name": "Researcher Social",
+        "workspace": "/Users/bilal/.openclaw/agents/researcher-social/workspace",
+        "agentDir": "/Users/bilal/.openclaw/agents/researcher-social/agent",
+        "model": "openrouter/openai/gpt-4o-mini",
+        "identity": {
+          "name": "Researcher Social"
+        },
+        "tools": {
+          "exec": {
+            "host": "gateway",
+            "security": "full",
+            "ask": "off"
+          },
+          "deny": [
+            "write",
+            "edit",
+            "message"
+          ]
+        }
+      },
+      {
+        "id": "researcher-reddit",
+        "default": false,
+        "name": "Researcher Reddit",
+        "workspace": "/Users/bilal/.openclaw/agents/researcher-reddit/workspace",
+        "agentDir": "/Users/bilal/.openclaw/agents/researcher-reddit/agent",
+        "model": "openrouter/openai/gpt-4o-mini",
+        "identity": {
+          "name": "Researcher Reddit"
+        },
+        "tools": {
+          "exec": {
+            "host": "gateway",
+            "security": "full",
+            "ask": "off"
+          },
+          "deny": [
+            "write",
+            "edit",
+            "message"
+          ]
+        }
+      },
+      {
+        "id": "researcher-youtube",
+        "default": false,
+        "name": "Researcher YouTube",
+        "workspace": "/Users/bilal/.openclaw/agents/researcher-youtube/workspace",
+        "agentDir": "/Users/bilal/.openclaw/agents/researcher-youtube/agent",
+        "model": "openrouter/openai/gpt-4o-mini",
+        "identity": {
+          "name": "Researcher YouTube"
+        },
+        "tools": {
+          "exec": {
+            "host": "gateway",
+            "security": "full",
+            "ask": "off"
+          },
+          "deny": [
+            "write",
+            "edit",
+            "message"
+          ]
+        }
+      },
+      {
+        "id": "researcher-x",
+        "default": false,
+        "name": "Researcher X",
+        "workspace": "/Users/bilal/.openclaw/agents/researcher-x/workspace",
+        "agentDir": "/Users/bilal/.openclaw/agents/researcher-x/agent",
+        "model": "openrouter/openai/gpt-4o-mini",
+        "identity": {
+          "name": "Researcher X"
+        },
+        "tools": {
+          "exec": {
+            "host": "gateway",
+            "security": "full",
+            "ask": "off"
+          },
+          "deny": [
+            "write",
+            "edit",
+            "message"
+          ]
+        }
+      },
+      {
+        "id": "writer",
+        "default": false,
+        "name": "Writer",
+        "workspace": "/Users/bilal/.openclaw/agents/writer/workspace",
+        "agentDir": "/Users/bilal/.openclaw/agents/writer/agent",
+        "model": "openrouter/openai/gpt-4o-mini",
+        "identity": {
+          "name": "Writer"
+        },
+        "tools": {
+          "exec": {
+            "host": "gateway",
+            "security": "full",
+            "ask": "off"
+          },
+          "deny": [
+            "browser",
+            "web_fetch",
+            "web_search",
+            "message"
+          ]
+        }
+      },
+      {
+        "id": "editor",
+        "default": false,
+        "name": "Editor",
+        "workspace": "/Users/bilal/.openclaw/agents/editor/workspace",
+        "agentDir": "/Users/bilal/.openclaw/agents/editor/agent",
+        "model": "openrouter/openai/gpt-4o-mini",
+        "identity": {
+          "name": "Editor"
+        },
+        "tools": {
+          "exec": {
+            "host": "gateway",
+            "security": "full",
+            "ask": "off"
+          },
+          "deny": [
+            "browser",
+            "web_fetch",
+            "web_search",
+            "message"
+          ]
+        }
+      }
+    ]
+  },
+  "tools": {
+    "profile": "full",
+    "exec": {
+      "host": "gateway",
+      "security": "full",
+      "ask": "off"
+    },
+    "web": {
+      "search": {
+        "enabled": false
+      }
+    },
+    "agentToAgent": {
+      "enabled": true
+    }
+  },
+  "messages": {
+    "ackReactionScope": "group-mentions"
+  },
+  "commands": {
+    "native": "auto",
+    "nativeSkills": "auto",
+    "bash": true
+  },
+  "hooks": {
+    "internal": {
+      "enabled": true,
+      "entries": {
+        "session-memory": {
+          "enabled": true
+        }
+      }
+    }
+  },
+  "web": {
+    "enabled": true
+  },
+  "browser": {
+    "enabled": true,
+    "evaluateEnabled": true,
+    "defaultProfile": "openclaw",
+    "profiles": {
+      "chrome": {
+        "driver": "clawd",
+        "color": "#4285F4",
+        "cdpPort": 18801
+      }
+    }
+  },
+  "channels": {
+    "whatsapp": {
+      "dmPolicy": "allowlist",
+      "selfChatMode": true,
+      "allowFrom": [
+        "+923248473417"
+      ],
+      "groupPolicy": "allowlist",
+      "mediaMaxMb": 50,
+      "debounceMs": 0
+    }
+  },
+  "gateway": {
+    "port": 18789,
+    "mode": "local",
+    "bind": "loopback",
+    "auth": {
+      "mode": "token",
+      "token": "42def3b6011105ad0cd26bdb85a98dd4603fe58cf8a8e4cf"
+    },
+    "tailscale": {
+      "mode": "off",
+      "resetOnExit": false
+    }
+  },
+  "skills": {
+    "install": {
+      "nodeManager": "npm"
+    }
+  },
+  "plugins": {
+    "entries": {
+      "whatsapp": {
+        "enabled": true
+      }
+    }
+  }
+}

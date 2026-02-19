@@ -1,0 +1,31 @@
+# Sensitive runtime/state
+credentials/
+devices/
+identity/
+logs/
+media/
+subagents/
+exec-approvals.json
+exec-approvals.sock
+
+# Ephemeral OpenClaw runtime folders
+browser/
+canvas/
+workspace-state.json
+update-check.json
+workspace/
+workspace-main/
+openclaw.json.bak*
+
+# Session/runtime artifacts
+agents/*/sessions/
+agents/*/agent/
+
+# Local caches/backups
+backups/
+.state/
+
+# OS/editor noise
+.DS_Store
+*.swp
+*.swo
