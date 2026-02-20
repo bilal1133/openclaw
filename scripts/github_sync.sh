@@ -19,6 +19,17 @@ fi
 
 REMOTE_URL="${OPENCLAW_GITHUB_REMOTE:-}"
 BRANCH="${OPENCLAW_GITHUB_BRANCH:-main}"
+SAFE_PATHS=(
+  ".gitignore"
+  "README.md"
+  "GITHUB_SYNC_SETUP.md"
+  "WORKFLOW_ENGINE.md"
+  "openclaw.template.json"
+  "agents"
+  "scripts"
+  "cron/jobs.json"
+  "workflows/definitions"
+)
 
 if ! git remote get-url origin >/dev/null 2>&1; then
   if [[ -z "$REMOTE_URL" ]]; then
@@ -40,11 +51,20 @@ git config pull.rebase true
 git config rebase.autoStash true
 git config fetch.prune true
 
-# Stage and commit local changes if any
+# Stage and commit local changes from safe paths only
 if [[ -n "$(git status --porcelain)" ]]; then
-  git add -A
-  git commit -m "chore(sync): automated snapshot $(date -u +"%Y-%m-%dT%H:%M:%SZ")" || true
-  log "Committed local changes"
+  git add -A -- "${SAFE_PATHS[@]}" 2>/dev/null || true
+  if [[ -n "$(git diff --cached --name-only)" ]]; then
+    if git diff --cached | rg -i '(sk-or-v1-|api[_-]?key|authorization:|bearer\s+[a-z0-9._-]+)' >/dev/null 2>&1; then
+      log "ERROR: potential secret detected in staged diff; aborting sync commit"
+      git reset >/dev/null 2>&1 || true
+      exit 1
+    fi
+    git commit -m "chore(sync): automated snapshot $(date -u +"%Y-%m-%dT%H:%M:%SZ")" || true
+    log "Committed safe local changes"
+  else
+    log "No safe tracked changes to commit"
+  fi
 fi
 
 # Sync with remote safely

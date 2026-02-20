@@ -144,9 +144,9 @@
         "id": "personal-assistant",
         "default": true,
         "name": "Personal Assistant",
-        "workspace": "/Users/bilal",
+        "workspace": "/Users/bilal/.openclaw/agents/personal-assistant/workspace",
         "agentDir": "/Users/bilal/.openclaw/agents/personal-assistant/agent",
-        "model": "openrouter/auto",
+        "model": "openrouter/anthropic/claude-3.5-sonnet",
         "identity": {
           "name": "Personal Assistant"
         },
@@ -380,6 +380,54 @@
             "message"
           ]
         }
+      },
+      {
+        "id": "fact-checker",
+        "default": false,
+        "name": "Fact Checker",
+        "workspace": "/Users/bilal/.openclaw/agents/fact-checker/workspace",
+        "agentDir": "/Users/bilal/.openclaw/agents/fact-checker/agent",
+        "model": "openrouter/openai/gpt-4o-mini",
+        "identity": {
+          "name": "Fact Checker"
+        },
+        "tools": {
+          "exec": {
+            "host": "gateway",
+            "security": "full",
+            "ask": "off"
+          },
+          "deny": [
+            "browser",
+            "web_fetch",
+            "web_search",
+            "message"
+          ]
+        }
+      },
+      {
+        "id": "seo-optimizer",
+        "default": false,
+        "name": "SEO Optimizer",
+        "workspace": "/Users/bilal/.openclaw/agents/seo-optimizer/workspace",
+        "agentDir": "/Users/bilal/.openclaw/agents/seo-optimizer/agent",
+        "model": "openrouter/openai/gpt-4o-mini",
+        "identity": {
+          "name": "SEO Optimizer"
+        },
+        "tools": {
+          "exec": {
+            "host": "gateway",
+            "security": "full",
+            "ask": "off"
+          },
+          "deny": [
+            "browser",
+            "web_fetch",
+            "web_search",
+            "message"
+          ]
+        }
       }
     ]
   },
@@ -450,7 +498,7 @@
     "bind": "loopback",
     "auth": {
       "mode": "token",
-      "token": "42def3b6011105ad0cd26bdb85a98dd4603fe58cf8a8e4cf"
+      "token": "REDACTED"
     },
     "tailscale": {
       "mode": "off",

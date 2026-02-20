@@ -13,6 +13,7 @@ browser/
 canvas/
 workspace-state.json
 update-check.json
+openclaw.json
 workspace/
 workspace-main/
 openclaw.json.bak*
@@ -20,6 +21,13 @@ openclaw.json.bak*
 # Session/runtime artifacts
 agents/*/sessions/
 agents/*/agent/
+cron/runs/
+cron/jobs.json.bak*
+memory/*.sqlite
+workflows/state/runs/
+workflows/state/tools/
+workflows/outbox/
+workflows/feedback/*.jsonl
 
 # Local caches/backups
 backups/

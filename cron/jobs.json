@@ -1,4 +1,300 @@
 {
   "version": 1,
-  "jobs": []
+  "jobs": [
+    {
+      "id": "9ec22199-0e50-43a0-8231-72b58e6e5baa",
+      "agentId": "orchestrator",
+      "name": "daily-content-command-center",
+      "description": "Daily competitor scan + content plan + publish pack (direct orchestrator)",
+      "enabled": true,
+      "createdAtMs": 1771504821000,
+      "updatedAtMs": 1771568438917,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 8 * * *",
+        "tz": "Asia/Karachi",
+        "staggerMs": 0
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "Run the Daily Content Command Center workflow autonomously.\n\nGoal:\n- Scan top competitors across YouTube, X/Twitter, LinkedIn, and Reddit.\n- Identify outlier content (posts/videos performing above usual baseline).\n- Summarize what is working: hooks, formats, topics, angles, CTA patterns, and timing.\n- Generate personalized daily content plan in my style.\n\nRequired outputs:\n1) Competitor outlier summary (top findings with links)\n2) Daily idea set:\n- 1 YouTube idea (title + hook + outline)\n- 1 short-form idea for TikTok/Reels (hook + beats)\n- 1 LinkedIn post draft\n- 1 newsletter angle + short draft\n3) Priority plan for today (what to publish first and why)\n4) Automation opportunities: one new automation idea to save time\n\nPublish pack:\n- Save files to /Users/bilal/.openclaw/agents/orchestrator/workspace/publish/latest/\n- Write/update:\n  - blog.md\n  - linkedin.md\n  - x-thread.md\n  - email.md\n\nDelivery:\n- Return concise daily briefing suitable for WhatsApp reading.\n- Include source links for key findings."
+      },
+      "delivery": {
+        "mode": "announce",
+        "channel": "whatsapp",
+        "to": "+923248473417",
+        "bestEffort": true
+      },
+      "state": {
+        "nextRunAtMs": 1771642800000,
+        "lastRunAtMs": 1771556442895,
+        "lastStatus": "error",
+        "lastDurationMs": 987465,
+        "consecutiveErrors": 2,
+        "lastError": "Error: cron: job execution timed out"
+      }
+    },
+    {
+      "id": "918410c3-40c2-44ce-acca-d1c1fe36e573",
+      "agentId": "orchestrator",
+      "name": "evening-content-recap-planner",
+      "description": "Evening recap + tomorrow plan (direct orchestrator)",
+      "enabled": true,
+      "createdAtMs": 1771509269862,
+      "updatedAtMs": 1771568438917,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 19 * * *",
+        "tz": "Asia/Karachi",
+        "staggerMs": 0
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "Run the Evening Content Recap and Tomorrow Planner workflow autonomously.\n\nGoal:\n- Review today's competitor/content signals and summarize what changed since morning.\n- Produce a concise end-of-day performance and opportunity brief.\n- Create an actionable plan for tomorrow's content execution.\n\nRequired outputs:\n1) Evening recap:\n- New outliers since morning\n- What topics/formats accelerated today\n- What likely underperformed and why\n2) Tomorrow plan:\n- Top 3 content opportunities with rationale\n- 1 YouTube concept (title + opening hook)\n- 1 short-form concept (hook + shot/beat outline)\n- 1 LinkedIn draft post\n- 1 newsletter angle and subject line\n3) Execution checklist for tomorrow morning (priority order)\n4) One optimization recommendation for improving the automation pipeline\n\nPublish pack updates:\n- Save/update files in /Users/bilal/.openclaw/agents/orchestrator/workspace/publish/latest/\n- blog.md, linkedin.md, x-thread.md, email.md\n\nDelivery:\n- Return concise WhatsApp-friendly briefing with links."
+      },
+      "delivery": {
+        "mode": "announce",
+        "channel": "whatsapp",
+        "to": "+923248473417",
+        "bestEffort": true
+      },
+      "state": {
+        "nextRunAtMs": 1771596000000,
+        "lastRunAtMs": 1771509600016,
+        "lastStatus": "ok",
+        "lastDurationMs": 78446,
+        "consecutiveErrors": 0
+      }
+    },
+    {
+      "id": "4082d722-806d-4ff4-8427-b7dff11922ba",
+      "agentId": "operator",
+      "name": "morning-briefing-7am",
+      "description": "Daily 7AM concise briefing (fast path)",
+      "enabled": true,
+      "createdAtMs": 1771512455692,
+      "updatedAtMs": 1771568438917,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 7 * * *",
+        "tz": "Asia/Karachi",
+        "staggerMs": 0
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "Generate a concise morning briefing with exactly 4 sections: YESTERDAY WINS, TODAY TOP 3, PENDING DECISIONS, GROWTH IDEA. Under 220 words. Bullet points only. No web browsing. No follow-up questions."
+      },
+      "delivery": {
+        "mode": "announce",
+        "channel": "whatsapp",
+        "to": "+923248473417",
+        "bestEffort": true
+      },
+      "state": {
+        "consecutiveErrors": 1,
+        "nextRunAtMs": 1771639200000,
+        "lastRunAtMs": 1771554113334,
+        "lastStatus": "error",
+        "lastDurationMs": 172,
+        "lastError": "Error: No available auth profile for openrouter (all in cooldown or unavailable)."
+      }
+    },
+    {
+      "id": "1335ca42-b1f0-4b4b-a240-7fbcfbe55d6e",
+      "agentId": "operator",
+      "name": "midnight-daily-tracker",
+      "description": "Midnight daily tracker + memory update (fast path)",
+      "enabled": true,
+      "createdAtMs": 1771512455692,
+      "updatedAtMs": 1771568438917,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 0 * * *",
+        "tz": "Asia/Karachi",
+        "staggerMs": 0
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "Create end-of-day tracker with sections COMPLETED, DECISIONS, BLOCKERS, INSIGHTS. Keep under 220 words. Then append only high-signal durable facts to memory. No web browsing. No follow-up questions."
+      },
+      "delivery": {
+        "mode": "announce",
+        "channel": "whatsapp",
+        "to": "+923248473417",
+        "bestEffort": true
+      },
+      "state": {
+        "consecutiveErrors": 1,
+        "nextRunAtMs": 1771614000000,
+        "lastRunAtMs": 1771528243992,
+        "lastStatus": "error",
+        "lastDurationMs": 1066415,
+        "lastError": "Error: cron: job execution timed out"
+      }
+    },
+    {
+      "id": "a5f95918-c307-4f8c-a25b-5cda9c1f987e",
+      "agentId": "operator",
+      "name": "nightly-github-backup-check",
+      "description": "2AM backup health check via script",
+      "enabled": true,
+      "createdAtMs": 1771512455692,
+      "updatedAtMs": 1771568438917,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 2 * * *",
+        "tz": "Asia/Karachi",
+        "staggerMs": 0
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "Run this command directly: /bin/bash /Users/bilal/.openclaw/scripts/self_heal.sh . Return a 3-line status: health, backup sync result, errors(if any). Do not browse web."
+      },
+      "delivery": {
+        "mode": "announce",
+        "channel": "whatsapp",
+        "to": "+923248473417",
+        "bestEffort": true
+      },
+      "state": {
+        "consecutiveErrors": 1,
+        "nextRunAtMs": 1771621200000,
+        "lastRunAtMs": 1771535293957,
+        "lastStatus": "error",
+        "lastDurationMs": 908414,
+        "lastError": "Error: cron: job execution timed out"
+      }
+    },
+    {
+      "id": "f125c302-980c-4419-85a4-5088ae32fc2d",
+      "agentId": "personal-assistant",
+      "name": "weekly-trend-analysis",
+      "description": "Weekly trend scan across Reddit, YouTube, X",
+      "enabled": true,
+      "createdAtMs": 1771512455692,
+      "updatedAtMs": 1771512455692,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 9 * * 1",
+        "tz": "Asia/Karachi",
+        "staggerMs": 0
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "Run weekly trend analysis for my niche and produce:\\n1) TOP 5 TRENDING TOPICS\\n2) 3 CONTENT IDEAS ranked by potential\\n3) 2 LEAD MAGNET CONCEPTS\\n4) AUDIENCE PAIN POINTS\\n\\nUse Reddit + YouTube + X signals. Return concise report with source links."
+      },
+      "delivery": {
+        "mode": "announce",
+        "channel": "whatsapp",
+        "to": "+923248473417",
+        "bestEffort": true
+      },
+      "state": {
+        "consecutiveErrors": 0,
+        "nextRunAtMs": 1771819200000
+      }
+    },
+    {
+      "id": "a27d6bc9-7085-4762-96e5-a427c8c31912",
+      "agentId": "operator",
+      "name": "qa-morning-1771568503",
+      "description": "qa",
+      "enabled": false,
+      "deleteAfterRun": true,
+      "createdAtMs": 1771568504565,
+      "updatedAtMs": 1771568522785,
+      "schedule": {
+        "kind": "at",
+        "at": "2026-02-20T06:21:56.529Z"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "Generate a concise morning briefing with exactly 4 sections: YESTERDAY WINS, TODAY TOP 3, PENDING DECISIONS, GROWTH IDEA. Under 120 words."
+      },
+      "delivery": {
+        "mode": "announce",
+        "channel": "last"
+      },
+      "state": {
+        "lastRunAtMs": 1771568516545,
+        "lastStatus": "error",
+        "lastDurationMs": 6240,
+        "lastError": "cron delivery target is missing",
+        "consecutiveErrors": 1
+      }
+    },
+    {
+      "id": "b4017e7a-0a09-4424-95c7-5ca5817f91e9",
+      "agentId": "operator",
+      "name": "qa-midnight-1771568504",
+      "description": "qa",
+      "enabled": false,
+      "deleteAfterRun": true,
+      "createdAtMs": 1771568505587,
+      "updatedAtMs": 1771568532802,
+      "schedule": {
+        "kind": "at",
+        "at": "2026-02-20T06:22:09.554Z"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "Create end-of-day tracker with COMPLETED, DECISIONS, BLOCKERS, INSIGHTS under 120 words."
+      },
+      "delivery": {
+        "mode": "announce",
+        "channel": "last"
+      },
+      "state": {
+        "lastRunAtMs": 1771568529608,
+        "lastStatus": "error",
+        "lastDurationMs": 3194,
+        "lastError": "cron delivery target is missing",
+        "consecutiveErrors": 1
+      }
+    },
+    {
+      "id": "8b1c2634-79d8-4ae9-88b3-cbf1feb2a5a8",
+      "agentId": "operator",
+      "name": "qa-backup-1771568505",
+      "description": "qa",
+      "enabled": true,
+      "deleteAfterRun": true,
+      "createdAtMs": 1771568506613,
+      "updatedAtMs": 1771568506613,
+      "schedule": {
+        "kind": "at",
+        "at": "2026-02-20T06:22:22.580Z"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "Run this command directly: /bin/bash /Users/bilal/.openclaw/scripts/self_heal.sh . Return 3-line status only."
+      },
+      "delivery": {
+        "mode": "announce",
+        "channel": "last"
+      },
+      "state": {
+        "nextRunAtMs": 1771568542580,
+        "runningAtMs": 1771568542591
+      }
+    }
+  ]
 }

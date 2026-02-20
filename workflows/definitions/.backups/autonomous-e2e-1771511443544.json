@@ -1,0 +1,64 @@
+{
+  "id": "autonomous-e2e",
+  "description": "General autonomous workflow engine: intake->classify->plan->configure_tools->execute->verify->deliver->log",
+  "defaults": {
+    "assumptions": [
+      "Prefer autonomous completion",
+      "Use personal-assistant as top-level router",
+      "Keep user-facing outputs concise unless long-form requested",
+      "Always include source links for key claims and date-tag major facts.",
+      "Prefer concise outputs unless user explicitly asks for long-form detail."
+    ]
+  },
+  "selfImprove": {
+    "enabled": true,
+    "autoApplyLowRisk": true,
+    "maxChangesPerRun": 2
+  },
+  "autoConfigure": {
+    "enabled": true,
+    "allowlist": [
+      "gateway_health",
+      "cron_scheduler",
+      "publish_directory"
+    ],
+    "toolCommands": {
+      "gateway_health": {
+        "command": "/bin/bash",
+        "args": [
+          "-lc",
+          "NODE22=/Users/bilal/.nvm/versions/node/v22.22.0/bin/node; OPENCLAW=/Users/bilal/.nvm/versions/node/v22.22.0/lib/node_modules/openclaw/dist/index.js; $NODE22 $OPENCLAW health --json >/dev/null"
+        ]
+      },
+      "cron_scheduler": {
+        "command": "/bin/bash",
+        "args": [
+          "-lc",
+          "NODE22=/Users/bilal/.nvm/versions/node/v22.22.0/bin/node; OPENCLAW=/Users/bilal/.nvm/versions/node/v22.22.0/lib/node_modules/openclaw/dist/index.js; $NODE22 $OPENCLAW cron status --json >/dev/null"
+        ]
+      },
+      "publish_directory": {
+        "command": "/bin/bash",
+        "args": [
+          "-lc",
+          "mkdir -p /Users/bilal/.openclaw/agents/orchestrator/workspace/publish/latest"
+        ]
+      }
+    }
+  },
+  "execute": {
+    "command": "/Users/bilal/.openclaw/scripts/workflow_ops/dispatch_task.sh",
+    "args": [
+      "{{route}}",
+      "{{task}}"
+    ]
+  },
+  "verify": {
+    "requiredFiles": [
+      "/Users/bilal/.openclaw/workflows/state/runs/{{runId}}.json"
+    ]
+  },
+  "deliver": {
+    "summaryFile": "/Users/bilal/.openclaw/workflows/outbox/{{runId}}.md"
+  }
+}

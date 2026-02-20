@@ -58,10 +58,8 @@ launchctl kickstart -k "gui/$(id -u)/ai.openclaw.gateway" || true
 sleep 2
 
 if health_ok; then
-  git add -A
-  git commit -m "chore(repair): auto-recovery $(date -u +"%Y-%m-%dT%H:%M:%SZ")" || true
+  log "Repair successful; syncing safe tracked files"
   "$ROOT/scripts/github_sync.sh" || true
-  log "Repair successful"
   exit 0
 fi
 
