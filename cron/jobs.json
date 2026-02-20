@@ -8,7 +8,7 @@
       "description": "Daily competitor scan + content plan + publish pack (direct orchestrator)",
       "enabled": true,
       "createdAtMs": 1771504821000,
-      "updatedAtMs": 1771568438917,
+      "updatedAtMs": 1771568620288,
       "schedule": {
         "kind": "cron",
         "expr": "0 8 * * *",
@@ -29,11 +29,7 @@
       },
       "state": {
         "nextRunAtMs": 1771642800000,
-        "lastRunAtMs": 1771556442895,
-        "lastStatus": "error",
-        "lastDurationMs": 987465,
-        "consecutiveErrors": 2,
-        "lastError": "Error: cron: job execution timed out"
+        "consecutiveErrors": 0
       }
     },
     {
@@ -77,7 +73,7 @@
       "description": "Daily 7AM concise briefing (fast path)",
       "enabled": true,
       "createdAtMs": 1771512455692,
-      "updatedAtMs": 1771568438917,
+      "updatedAtMs": 1771568620288,
       "schedule": {
         "kind": "cron",
         "expr": "0 7 * * *",
@@ -97,12 +93,8 @@
         "bestEffort": true
       },
       "state": {
-        "consecutiveErrors": 1,
-        "nextRunAtMs": 1771639200000,
-        "lastRunAtMs": 1771554113334,
-        "lastStatus": "error",
-        "lastDurationMs": 172,
-        "lastError": "Error: No available auth profile for openrouter (all in cooldown or unavailable)."
+        "consecutiveErrors": 0,
+        "nextRunAtMs": 1771639200000
       }
     },
     {
@@ -112,7 +104,7 @@
       "description": "Midnight daily tracker + memory update (fast path)",
       "enabled": true,
       "createdAtMs": 1771512455692,
-      "updatedAtMs": 1771568438917,
+      "updatedAtMs": 1771568620289,
       "schedule": {
         "kind": "cron",
         "expr": "0 0 * * *",
@@ -132,12 +124,8 @@
         "bestEffort": true
       },
       "state": {
-        "consecutiveErrors": 1,
-        "nextRunAtMs": 1771614000000,
-        "lastRunAtMs": 1771528243992,
-        "lastStatus": "error",
-        "lastDurationMs": 1066415,
-        "lastError": "Error: cron: job execution timed out"
+        "consecutiveErrors": 0,
+        "nextRunAtMs": 1771614000000
       }
     },
     {
@@ -147,7 +135,7 @@
       "description": "2AM backup health check via script",
       "enabled": true,
       "createdAtMs": 1771512455692,
-      "updatedAtMs": 1771568438917,
+      "updatedAtMs": 1771568620289,
       "schedule": {
         "kind": "cron",
         "expr": "0 2 * * *",
@@ -167,12 +155,8 @@
         "bestEffort": true
       },
       "state": {
-        "consecutiveErrors": 1,
-        "nextRunAtMs": 1771621200000,
-        "lastRunAtMs": 1771535293957,
-        "lastStatus": "error",
-        "lastDurationMs": 908414,
-        "lastError": "Error: cron: job execution timed out"
+        "consecutiveErrors": 0,
+        "nextRunAtMs": 1771621200000
       }
     },
     {
@@ -273,10 +257,10 @@
       "agentId": "operator",
       "name": "qa-backup-1771568505",
       "description": "qa",
-      "enabled": true,
+      "enabled": false,
       "deleteAfterRun": true,
       "createdAtMs": 1771568506613,
-      "updatedAtMs": 1771568506613,
+      "updatedAtMs": 1771568555515,
       "schedule": {
         "kind": "at",
         "at": "2026-02-20T06:22:22.580Z"
@@ -292,8 +276,41 @@
         "channel": "last"
       },
       "state": {
-        "nextRunAtMs": 1771568542580,
-        "runningAtMs": 1771568542591
+        "lastRunAtMs": 1771568542594,
+        "lastStatus": "error",
+        "lastDurationMs": 12921,
+        "lastError": "cron delivery target is missing",
+        "consecutiveErrors": 1
+      }
+    },
+    {
+      "id": "4daecc8f-291e-457f-9b62-7105ed1c3403",
+      "agentId": "operator",
+      "name": "nightly-github-backup-check-adhoc-1771568983",
+      "description": "manual trigger",
+      "enabled": true,
+      "deleteAfterRun": true,
+      "createdAtMs": 1771569009529,
+      "updatedAtMs": 1771569009529,
+      "schedule": {
+        "kind": "at",
+        "at": "2026-02-20T06:30:38.562Z"
+      },
+      "sessionTarget": "isolated",
+      "wakeMode": "now",
+      "payload": {
+        "kind": "agentTurn",
+        "message": "Run this command directly: /bin/bash /Users/bilal/.openclaw/scripts/self_heal.sh . Return a 3-line status: health, backup sync result, errors(if any)."
+      },
+      "delivery": {
+        "mode": "announce",
+        "channel": "whatsapp",
+        "to": "+923248473417",
+        "bestEffort": true
+      },
+      "state": {
+        "nextRunAtMs": 1771569038562,
+        "runningAtMs": 1771569044547
       }
     }
   ]
