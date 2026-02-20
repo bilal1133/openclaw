@@ -138,6 +138,36 @@ function renderTemplate(text, ctx) {
   return text.replace(/\{\{(\w+)\}\}/g, (_, key) => String(ctx[key] ?? ''));
 }
 
+function todayDate() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function parseInputPayload(inputText) {
+  const raw = (inputText || '').trim();
+  if (!raw) return null;
+
+  const asJson = () => {
+    try {
+      const parsed = JSON.parse(raw);
+      return parsed && typeof parsed === 'object' ? parsed : null;
+    } catch {
+      return null;
+    }
+  };
+
+  const direct = asJson();
+  if (direct) return direct;
+
+  const prefixed = raw.match(/^RUN_BRAND_WORKFLOW\s+(\{[\s\S]+\})$/);
+  if (!prefixed) return null;
+  try {
+    const parsed = JSON.parse(prefixed[1]);
+    return parsed && typeof parsed === 'object' ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
 function runStage(run, wf, name) {
   const s = getStage(run, name);
   if (s.status === 'completed') return;
@@ -149,23 +179,45 @@ function runStage(run, wf, name) {
     let output = null;
 
     if (name === 'intake') {
+      const parsedPayload = parseInputPayload(run.input);
+      const inferredTask = parsedPayload
+        ? String(parsedPayload.task || parsedPayload.prompt || parsedPayload.message || '').trim()
+        : '';
+
+      const normalizedTask = inferredTask || run.input.trim();
+      if (parsedPayload && typeof parsedPayload.brand_id === 'string') run.context.brand_id = parsedPayload.brand_id.trim();
+      if (parsedPayload && typeof parsedPayload.cadence === 'string') run.context.cadence = parsedPayload.cadence.trim();
+      if (parsedPayload && typeof parsedPayload.run_date === 'string') run.context.run_date = parsedPayload.run_date.trim();
+      if (parsedPayload && typeof parsedPayload.trigger_source === 'string') run.context.trigger_source = parsedPayload.trigger_source.trim();
+      if (parsedPayload && typeof parsedPayload.approval_id === 'string') run.context.approval_id = parsedPayload.approval_id.trim();
+      if (parsedPayload && typeof parsedPayload.role === 'string') run.context.role = parsedPayload.role.trim();
+
       output = {
         inputText: run.input,
-        normalizedTask: run.input.trim(),
+        normalizedTask,
+        parsedPayload,
         receivedAt: nowIso()
       };
       run.context.task = output.normalizedTask;
     } else if (name === 'classify') {
       const t = (run.context.task || '').toLowerCase();
       let route = 'general';
-      if (/(blog|article|newsletter|linkedin|post|thread|content)/.test(t)) route = 'content';
+      if (run.context.brand_id || run.context.cadence || (t.includes('run_brand_workflow'))) route = 'brand';
+      else if (/(blog|article|newsletter|linkedin|post|thread|content)/.test(t)) route = 'content';
       else if (/(restart|fix|debug|config|setup|gateway|cron|error)/.test(t)) route = 'ops';
+      if (route === 'brand') {
+        if (!run.context.cadence) run.context.cadence = 'daily';
+        if (!run.context.run_date) run.context.run_date = todayDate();
+        if (!run.context.trigger_source) run.context.trigger_source = 'manual';
+      }
       output = { route };
       run.context.route = route;
     } else if (name === 'plan') {
       const route = run.context.route || 'general';
       const steps = route === 'content'
         ? ['delegate_to_personal_assistant', 'generate_publish_pack', 'deliver_summary']
+        : route === 'brand'
+          ? ['delegate_to_brand_orchestrator', 'assemble_role_artifacts', 'run_guardrails', 'create_approval_package', 'deliver_summary']
         : route === 'ops'
           ? ['delegate_with_ops_prefix', 'verify_changes', 'deliver_summary']
           : ['handle_directly_or_delegate', 'verify', 'deliver'];
@@ -206,6 +258,11 @@ function runStage(run, wf, name) {
       const templateContext = {
         task: run.context.task || '',
         route: run.context.route || 'general',
+        brand_id: run.context.brand_id || '',
+        cadence: run.context.cadence || '',
+        run_date: run.context.run_date || '',
+        trigger_source: run.context.trigger_source || '',
+        approval_id: run.context.approval_id || '',
         runId: run.runId,
         idempotencyKey: run.idempotencyKey
       };
@@ -214,6 +271,11 @@ function runStage(run, wf, name) {
         WF_RUN_ID: run.runId,
         WF_ROUTE: templateContext.route,
         WF_TASK: templateContext.task,
+        WF_BRAND_ID: templateContext.brand_id,
+        WF_CADENCE: templateContext.cadence,
+        WF_RUN_DATE: templateContext.run_date,
+        WF_TRIGGER_SOURCE: templateContext.trigger_source,
+        WF_APPROVAL_ID: templateContext.approval_id,
         WF_IDEMPOTENCY_KEY: run.idempotencyKey
       });
       if (!res.ok) throw new Error(res.stderr || `execute failed with status ${res.status}`);
@@ -222,19 +284,45 @@ function runStage(run, wf, name) {
     } else if (name === 'verify') {
       const checks = [];
       const verify = wf.verify || {};
+      const verifyTemplateContext = {
+        runId: run.runId,
+        workflowId: run.workflowId,
+        task: run.context.task || '',
+        route: run.context.route || 'general',
+        brand_id: run.context.brand_id || '',
+        cadence: run.context.cadence || '',
+        run_date: run.context.run_date || '',
+        trigger_source: run.context.trigger_source || '',
+        approval_id: run.context.approval_id || ''
+      };
       for (const file of verify.requiredFiles || []) {
-        const p = renderTemplate(file, { runId: run.runId });
+        const p = renderTemplate(file, verifyTemplateContext);
         checks.push({ file: p, exists: fs.existsSync(p) });
       }
       const failed = checks.filter((c) => !c.exists);
       output = { checks, ok: failed.length === 0 };
       if (!output.ok) throw new Error(`verify failed: missing ${failed.map((f) => f.file).join(', ')}`);
     } else if (name === 'deliver') {
-      const outPath = renderTemplate(wf.deliver?.summaryFile || path.join(OUTBOX_DIR, '{{runId}}.md'), { runId: run.runId });
+      const outPath = renderTemplate(wf.deliver?.summaryFile || path.join(OUTBOX_DIR, '{{runId}}.md'), {
+        runId: run.runId,
+        workflowId: run.workflowId,
+        task: run.context.task || '',
+        route: run.context.route || '',
+        brand_id: run.context.brand_id || '',
+        cadence: run.context.cadence || '',
+        run_date: run.context.run_date || '',
+        trigger_source: run.context.trigger_source || '',
+        approval_id: run.context.approval_id || ''
+      });
       const lines = [
         `# Workflow Run ${run.runId}`,
         `- Workflow: ${run.workflowId}`,
         `- Route: ${run.context.route}`,
+        `- Brand: ${run.context.brand_id || 'n/a'}`,
+        `- Cadence: ${run.context.cadence || 'n/a'}`,
+        `- Run Date: ${run.context.run_date || 'n/a'}`,
+        `- Trigger Source: ${run.context.trigger_source || 'n/a'}`,
+        `- Approval ID: ${run.context.approval_id || 'n/a'}`,
         `- Task: ${run.context.task}`,
         `- Status: ${run.status}`,
         `- Updated: ${nowIso()}`,
@@ -249,7 +337,17 @@ function runStage(run, wf, name) {
       output = { summaryFile: outPath };
       run.context.delivery = output;
     } else if (name === 'log') {
-      appendLog({ ts: nowIso(), runId: run.runId, workflowId: run.workflowId, status: run.status, route: run.context.route });
+      appendLog({
+        ts: nowIso(),
+        runId: run.runId,
+        workflowId: run.workflowId,
+        status: run.status,
+        route: run.context.route,
+        brand_id: run.context.brand_id || null,
+        cadence: run.context.cadence || null,
+        approval_id: run.context.approval_id || null,
+        role: run.context.role || null
+      });
       const improve = runFeedbackImprove(run.workflowId, wf);
       output = { logged: true, selfImprove: improve };
     } else {

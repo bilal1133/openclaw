@@ -36,11 +36,32 @@ Tool auto-configuration is allowlist-only and definition-driven:
 Definition file:
 `/Users/bilal/.openclaw/workflows/definitions/autonomous-e2e.json`
 
+## Multi-brand workflows (v1)
+New workflow definitions:
+- `/Users/bilal/.openclaw/workflows/definitions/brand-onboard-v1.json`
+- `/Users/bilal/.openclaw/workflows/definitions/brand-daily-v1.json`
+- `/Users/bilal/.openclaw/workflows/definitions/brand-weekly-cs-v1.json`
+- `/Users/bilal/.openclaw/workflows/definitions/brand-monthly-qbr-v1.json`
+- `/Users/bilal/.openclaw/workflows/definitions/brand-approval-reminder-v1.json`
+
+Example run:
+```bash
+node /Users/bilal/.openclaw/scripts/workflow_engine.mjs run brand-daily-v1 \
+  --input '{"brand_id":"acme","cadence":"daily","run_date":"2026-02-20","trigger_source":"manual","task":"Run daily package"}'
+```
+
 ## Autonomous operations
 The `execute` stage dispatches a one-shot cron task to `personal-assistant` using:
 `/Users/bilal/.openclaw/scripts/workflow_ops/dispatch_task.sh`
 
 That keeps orchestration centralized while still enabling autonomous execution.
+
+For multi-brand workflows, dispatch is handled by:
+- `/Users/bilal/.openclaw/scripts/workflow_ops/dispatch_brand_task.sh`
+- `/Users/bilal/.openclaw/scripts/workflow_ops/provision_brand_jobs.sh`
+- `/Users/bilal/.openclaw/scripts/workflow_ops/approval_state.mjs`
+- `/Users/bilal/.openclaw/scripts/workflow_ops/guardrail_check.mjs`
+- `/Users/bilal/.openclaw/scripts/workflow_ops/pattern_sanitizer.mjs`
 
 ## Feedback-driven self-improvement
 Submit feedback:

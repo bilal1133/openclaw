@@ -1,0 +1,69 @@
+{
+  "id": "brand-onboard-v1",
+  "description": "Onboard a brand with dossier generation and approval kickoff",
+  "defaults": {
+    "assumptions": [
+      "OpenClaw-local first operation",
+      "Single brand owner approval",
+      "24h approval SLA",
+      "Strict citation and claim guardrails"
+    ]
+  },
+  "selfImprove": {
+    "enabled": false,
+    "autoApplyLowRisk": false,
+    "maxChangesPerRun": 0
+  },
+  "autoConfigure": {
+    "enabled": true,
+    "allowlist": [
+      "gateway_health",
+      "cron_scheduler",
+      "brand_runtime_dirs"
+    ],
+    "toolCommands": {
+      "gateway_health": {
+        "command": "/bin/bash",
+        "args": [
+          "-lc",
+          "NODE22=/Users/bilal/.nvm/versions/node/v22.22.0/bin/node; OPENCLAW=/Users/bilal/.nvm/versions/node/v22.22.0/lib/node_modules/openclaw/dist/index.js; $NODE22 $OPENCLAW health --json >/dev/null"
+        ]
+      },
+      "cron_scheduler": {
+        "command": "/bin/bash",
+        "args": [
+          "-lc",
+          "NODE22=/Users/bilal/.nvm/versions/node/v22.22.0/bin/node; OPENCLAW=/Users/bilal/.nvm/versions/node/v22.22.0/lib/node_modules/openclaw/dist/index.js; $NODE22 $OPENCLAW cron status --json >/dev/null"
+        ]
+      },
+      "brand_runtime_dirs": {
+        "command": "/bin/bash",
+        "args": [
+          "-lc",
+          "mkdir -p /Users/bilal/.openclaw/brands/_shared /Users/bilal/.openclaw/workflows/approvals/pending /Users/bilal/.openclaw/workflows/approvals/approved /Users/bilal/.openclaw/workflows/approvals/rejected /Users/bilal/.openclaw/workflows/approvals/held"
+        ]
+      }
+    }
+  },
+  "execute": {
+    "command": "/Users/bilal/.openclaw/scripts/workflow_ops/dispatch_brand_task.sh",
+    "args": [
+      "onboard",
+      "{{brand_id}}",
+      "{{task}}",
+      "{{run_date}}",
+      "{{trigger_source}}"
+    ]
+  },
+  "verify": {
+    "requiredFiles": [
+      "/Users/bilal/.openclaw/workflows/state/runs/{{runId}}.json",
+      "/Users/bilal/.openclaw/brands/{{brand_id}}/profile/brand-dossier.md",
+      "/Users/bilal/.openclaw/brands/{{brand_id}}/profile/key-principle.md",
+      "/Users/bilal/.openclaw/brands/{{brand_id}}/runs/{{runId}}"
+    ]
+  },
+  "deliver": {
+    "summaryFile": "/Users/bilal/.openclaw/workflows/outbox/{{runId}}.md"
+  }
+}

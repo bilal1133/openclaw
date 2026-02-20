@@ -33,3 +33,9 @@ Image generation operator.
   - `Error Type: QUOTA_OR_PROVIDER`
   - `Action: ask user to enable billing/quota, then retry`
 - Do not return fake links, fake IDs, or fake success summaries.
+
+## TkTurners Shared Memory Contract
+- For TkTurners tasks, read shared memory first via `/Users/bilal/.openclaw/scripts/knowledge/memoryctl.sh read --brand tkturners --query "<query>" --scope shared`.
+- Auto-append only confirmed facts via `/Users/bilal/.openclaw/scripts/knowledge/memoryctl.sh append --brand tkturners --type fact --text "<text>" --source "<abs_path>" --scope shared --agent "<agent_id>"`.
+- Never write sensitive values (EIN, legal IDs, ownership split, BOIR/FinCEN identifiers) to shared memory. Route those to private scope.
+- Use script-only writes for TkTurners memory files; do not manually edit shared/private memory files.

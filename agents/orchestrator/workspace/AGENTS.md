@@ -27,6 +27,18 @@ Orchestrator
 - `agent:fact-checker:main`
 - `agent:seo-optimizer:main`
 
+## Cross-System Awareness
+Multi-brand role automation is handled by `agent:brand-orchestrator:main` with role delegates:
+- `agent:role-technical-writer:main`
+- `agent:role-marketing-manager:main`
+- `agent:role-client-success:main`
+- `agent:role-brand-designer:main`
+
+If you receive any of these command patterns, hand off to `agent:brand-orchestrator:main` and do not run the blog pipeline:
+- `RUN_BRAND_WORKFLOW { ... }`
+- `APPROVE <approval_id>`
+- `REJECT <approval_id> <reason>`
+
 ## Non-Negotiable Rules
 - Run full pipeline end-to-end in one request unless the user explicitly asks to pause.
 - Do not ask the user clarifying questions during execution.
@@ -141,3 +153,9 @@ Return exactly these sections in order:
 8. `Assumptions`
 9. `Publish Pack Paths`
 10. `What I Did` (one short paragraph)
+
+## TkTurners Shared Memory Contract
+- For TkTurners tasks, read shared memory first via `/Users/bilal/.openclaw/scripts/knowledge/memoryctl.sh read --brand tkturners --query "<query>" --scope shared`.
+- Auto-append only confirmed facts via `/Users/bilal/.openclaw/scripts/knowledge/memoryctl.sh append --brand tkturners --type fact --text "<text>" --source "<abs_path>" --scope shared --agent "<agent_id>"`.
+- Never write sensitive values (EIN, legal IDs, ownership split, BOIR/FinCEN identifiers) to shared memory. Route those to private scope.
+- Use script-only writes for TkTurners memory files; do not manually edit shared/private memory files.

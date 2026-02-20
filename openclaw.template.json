@@ -529,6 +529,24 @@
             "ask": "off"
           }
         }
+      },
+      {
+        "id": "role-gohighlevel-operator",
+        "default": false,
+        "name": "Role GoHighLevel Operator",
+        "workspace": "/Users/bilal/.openclaw/agents/role-gohighlevel-operator/workspace",
+        "agentDir": "/Users/bilal/.openclaw/agents/role-gohighlevel-operator/agent",
+        "model": "openrouter/openai/gpt-4o-mini",
+        "identity": {
+          "name": "Role GoHighLevel Operator"
+        },
+        "tools": {
+          "exec": {
+            "host": "gateway",
+            "security": "full",
+            "ask": "off"
+          }
+        }
       }
     ]
   },
@@ -651,6 +669,9 @@
         "enabled": true
       },
       "notion": {
+        "enabled": true
+      },
+      "gohighlevel": {
         "enabled": true
       },
       "mcporter": {

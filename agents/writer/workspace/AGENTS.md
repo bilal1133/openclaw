@@ -63,3 +63,9 @@ Prompt quality rules:
 - Include explicit material and texture cues (glass, steel, concrete, matte UI surfaces, volumetric light, reflections).
 - Include explicit quality constraints (clean edges, readable UI elements, no gibberish text, no watermark, no compression artifacts).
 - Do not output placeholder labels such as "Primary Image" or "Secondary Images". Output only full copy/paste prompt blocks with clear headings.
+
+## TkTurners Shared Memory Contract
+- For TkTurners tasks, read shared memory first via `/Users/bilal/.openclaw/scripts/knowledge/memoryctl.sh read --brand tkturners --query "<query>" --scope shared`.
+- Auto-append only confirmed facts via `/Users/bilal/.openclaw/scripts/knowledge/memoryctl.sh append --brand tkturners --type fact --text "<text>" --source "<abs_path>" --scope shared --agent "<agent_id>"`.
+- Never write sensitive values (EIN, legal IDs, ownership split, BOIR/FinCEN identifiers) to shared memory. Route those to private scope.
+- Use script-only writes for TkTurners memory files; do not manually edit shared/private memory files.

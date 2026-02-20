@@ -1,0 +1,72 @@
+{
+  "id": "brand-daily-v1",
+  "description": "Daily multi-role autonomous run (technical writer + marketing + brand design)",
+  "defaults": {
+    "assumptions": [
+      "Daily cadence for content and design output",
+      "Final pre-publish approval gate required",
+      "Cross-brand sharing limited to sanitized patterns"
+    ]
+  },
+  "selfImprove": {
+    "enabled": false,
+    "autoApplyLowRisk": false,
+    "maxChangesPerRun": 0
+  },
+  "autoConfigure": {
+    "enabled": true,
+    "allowlist": [
+      "gateway_health",
+      "cron_scheduler",
+      "brand_runtime_dirs"
+    ],
+    "toolCommands": {
+      "gateway_health": {
+        "command": "/bin/bash",
+        "args": [
+          "-lc",
+          "NODE22=/Users/bilal/.nvm/versions/node/v22.22.0/bin/node; OPENCLAW=/Users/bilal/.nvm/versions/node/v22.22.0/lib/node_modules/openclaw/dist/index.js; $NODE22 $OPENCLAW health --json >/dev/null"
+        ]
+      },
+      "cron_scheduler": {
+        "command": "/bin/bash",
+        "args": [
+          "-lc",
+          "NODE22=/Users/bilal/.nvm/versions/node/v22.22.0/bin/node; OPENCLAW=/Users/bilal/.nvm/versions/node/v22.22.0/lib/node_modules/openclaw/dist/index.js; $NODE22 $OPENCLAW cron status --json >/dev/null"
+        ]
+      },
+      "brand_runtime_dirs": {
+        "command": "/bin/bash",
+        "args": [
+          "-lc",
+          "mkdir -p /Users/bilal/.openclaw/brands/_shared /Users/bilal/.openclaw/workflows/approvals/pending /Users/bilal/.openclaw/workflows/approvals/approved /Users/bilal/.openclaw/workflows/approvals/rejected /Users/bilal/.openclaw/workflows/approvals/held"
+        ]
+      }
+    }
+  },
+  "execute": {
+    "command": "/Users/bilal/.openclaw/scripts/workflow_ops/dispatch_brand_task.sh",
+    "args": [
+      "daily",
+      "{{brand_id}}",
+      "{{task}}",
+      "{{run_date}}",
+      "{{trigger_source}}"
+    ]
+  },
+  "verify": {
+    "requiredFiles": [
+      "/Users/bilal/.openclaw/workflows/state/runs/{{runId}}.json",
+      "/Users/bilal/.openclaw/brands/{{brand_id}}/artifacts/{{run_date}}/{{runId}}/technical-writer.md",
+      "/Users/bilal/.openclaw/brands/{{brand_id}}/artifacts/{{run_date}}/{{runId}}/marketing-pack.md",
+      "/Users/bilal/.openclaw/brands/{{brand_id}}/artifacts/{{run_date}}/{{runId}}/brand-design-pack.md",
+      "/Users/bilal/.openclaw/brands/{{brand_id}}/artifacts/{{run_date}}/{{runId}}/publish-bundle.md",
+      "/Users/bilal/.openclaw/brands/{{brand_id}}/artifacts/{{run_date}}/{{runId}}/sources.csv",
+      "/Users/bilal/.openclaw/brands/{{brand_id}}/artifacts/{{run_date}}/{{runId}}/run-manifest.json",
+      "/Users/bilal/.openclaw/brands/{{brand_id}}/artifacts/{{run_date}}/{{runId}}/approval-summary.md"
+    ]
+  },
+  "deliver": {
+    "summaryFile": "/Users/bilal/.openclaw/workflows/outbox/{{runId}}.md"
+  }
+}

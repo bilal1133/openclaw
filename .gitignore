@@ -7,6 +7,8 @@ media/
 subagents/
 exec-approvals.json
 exec-approvals.sock
+.env
+.env.*
 
 # Ephemeral OpenClaw runtime folders
 browser/
@@ -48,6 +50,26 @@ agents/personal-assistant/workspace/*
 !agents/image-studio/workspace/
 agents/image-studio/workspace/*
 !agents/image-studio/workspace/AGENTS.md
+!agents/brand-orchestrator/
+!agents/brand-orchestrator/workspace/
+agents/brand-orchestrator/workspace/*
+!agents/brand-orchestrator/workspace/AGENTS.md
+!agents/role-technical-writer/
+!agents/role-technical-writer/workspace/
+agents/role-technical-writer/workspace/*
+!agents/role-technical-writer/workspace/AGENTS.md
+!agents/role-marketing-manager/
+!agents/role-marketing-manager/workspace/
+agents/role-marketing-manager/workspace/*
+!agents/role-marketing-manager/workspace/AGENTS.md
+!agents/role-client-success/
+!agents/role-client-success/workspace/
+agents/role-client-success/workspace/*
+!agents/role-client-success/workspace/AGENTS.md
+!agents/role-brand-designer/
+!agents/role-brand-designer/workspace/
+agents/role-brand-designer/workspace/*
+!agents/role-brand-designer/workspace/AGENTS.md
 
 # Local caches/backups
 backups/
