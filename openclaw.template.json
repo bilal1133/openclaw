@@ -121,6 +121,9 @@
       "maxConcurrent": 4,
       "subagents": {
         "maxConcurrent": 8
+      },
+      "memorySearch": {
+        "enabled": false
       }
     },
     "list": [
@@ -146,6 +149,11 @@
         "name": "Personal Assistant",
         "workspace": "/Users/bilal/.openclaw/agents/personal-assistant/workspace",
         "agentDir": "/Users/bilal/.openclaw/agents/personal-assistant/agent",
+        "subagents": {
+          "allowAgents": [
+            "*"
+          ]
+        },
         "model": "openrouter/anthropic/claude-3.5-sonnet",
         "identity": {
           "name": "Personal Assistant"
@@ -428,6 +436,99 @@
             "message"
           ]
         }
+      },
+      {
+        "id": "brand-orchestrator",
+        "default": false,
+        "name": "Multi-Brand Orchestrator",
+        "workspace": "/Users/bilal/.openclaw/agents/brand-orchestrator/workspace",
+        "agentDir": "/Users/bilal/.openclaw/agents/brand-orchestrator/agent",
+        "model": "openrouter/anthropic/claude-3.5-sonnet",
+        "identity": {
+          "name": "Brand Orchestrator"
+        },
+        "tools": {
+          "exec": {
+            "host": "gateway",
+            "security": "full",
+            "ask": "off"
+          },
+          "deny": [
+            "message"
+          ]
+        }
+      },
+      {
+        "id": "role-technical-writer",
+        "default": false,
+        "name": "Role Technical Writer",
+        "workspace": "/Users/bilal/.openclaw/agents/role-technical-writer/workspace",
+        "agentDir": "/Users/bilal/.openclaw/agents/role-technical-writer/agent",
+        "model": "openrouter/openai/gpt-4o-mini",
+        "identity": {
+          "name": "Role Technical Writer"
+        },
+        "tools": {
+          "exec": {
+            "host": "gateway",
+            "security": "full",
+            "ask": "off"
+          }
+        }
+      },
+      {
+        "id": "role-marketing-manager",
+        "default": false,
+        "name": "Role Marketing Manager",
+        "workspace": "/Users/bilal/.openclaw/agents/role-marketing-manager/workspace",
+        "agentDir": "/Users/bilal/.openclaw/agents/role-marketing-manager/agent",
+        "model": "openrouter/openai/gpt-4o-mini",
+        "identity": {
+          "name": "Role Marketing Manager"
+        },
+        "tools": {
+          "exec": {
+            "host": "gateway",
+            "security": "full",
+            "ask": "off"
+          }
+        }
+      },
+      {
+        "id": "role-client-success",
+        "default": false,
+        "name": "Role Client Success Manager",
+        "workspace": "/Users/bilal/.openclaw/agents/role-client-success/workspace",
+        "agentDir": "/Users/bilal/.openclaw/agents/role-client-success/agent",
+        "model": "openrouter/openai/gpt-4o-mini",
+        "identity": {
+          "name": "Role Client Success"
+        },
+        "tools": {
+          "exec": {
+            "host": "gateway",
+            "security": "full",
+            "ask": "off"
+          }
+        }
+      },
+      {
+        "id": "role-brand-designer",
+        "default": false,
+        "name": "Role Brand Designer",
+        "workspace": "/Users/bilal/.openclaw/agents/role-brand-designer/workspace",
+        "agentDir": "/Users/bilal/.openclaw/agents/role-brand-designer/agent",
+        "model": "openrouter/openai/gpt-4o-mini",
+        "identity": {
+          "name": "Role Brand Designer"
+        },
+        "tools": {
+          "exec": {
+            "host": "gateway",
+            "security": "full",
+            "ask": "off"
+          }
+        }
       }
     ]
   },
@@ -506,8 +607,58 @@
     }
   },
   "skills": {
+    "load": {
+      "extraDirs": [
+        "/Users/bilal/.codex/skills",
+        "/Users/bilal/.agents/skills"
+      ]
+    },
     "install": {
       "nodeManager": "npm"
+    },
+    "entries": {
+      "tkturners-memory": {
+        "enabled": true
+      },
+      "skill-installer": {
+        "enabled": true
+      },
+      "skill-creator": {
+        "enabled": true
+      },
+      "sora": {
+        "enabled": true
+      },
+      "1password": {
+        "enabled": true
+      },
+      "github": {
+        "enabled": true
+      },
+      "gh-issues": {
+        "enabled": true
+      },
+      "blogwatcher": {
+        "enabled": true
+      },
+      "summarize": {
+        "enabled": true
+      },
+      "openai-image-gen": {
+        "enabled": true
+      },
+      "openai-whisper-api": {
+        "enabled": true
+      },
+      "notion": {
+        "enabled": true
+      },
+      "mcporter": {
+        "enabled": true
+      },
+      "model-usage": {
+        "enabled": true
+      }
     }
   },
   "plugins": {
