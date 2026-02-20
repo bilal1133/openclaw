@@ -30,6 +30,25 @@ workflows/state/index.json
 workflows/outbox/
 workflows/feedback/*.jsonl
 
+# Track core configuration/instructions for reproducible setup
+!openclaw.json
+!agents/orchestrator/
+!agents/orchestrator/workspace/
+agents/orchestrator/workspace/*
+!agents/orchestrator/workspace/AGENTS.md
+!agents/writer/
+!agents/writer/workspace/
+agents/writer/workspace/*
+!agents/writer/workspace/AGENTS.md
+!agents/personal-assistant/
+!agents/personal-assistant/workspace/
+agents/personal-assistant/workspace/*
+!agents/personal-assistant/workspace/AGENTS.md
+!agents/image-studio/
+!agents/image-studio/workspace/
+agents/image-studio/workspace/*
+!agents/image-studio/workspace/AGENTS.md
+
 # Local caches/backups
 backups/
 .state/
