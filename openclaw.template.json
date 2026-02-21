@@ -41,7 +41,7 @@
               "cacheWrite": 0
             },
             "contextWindow": 200000,
-            "maxTokens": 8192
+            "maxTokens": 512
           },
           {
             "id": "openai/gpt-4o-mini",
@@ -57,7 +57,7 @@
               "cacheWrite": 0
             },
             "contextWindow": 128000,
-            "maxTokens": 8192
+            "maxTokens": 512
           },
           {
             "id": "anthropic/claude-3.5-sonnet",
@@ -73,7 +73,7 @@
               "cacheWrite": 0
             },
             "contextWindow": 200000,
-            "maxTokens": 8192
+            "maxTokens": 512
           },
           {
             "id": "anthropic/claude-3-opus",
@@ -89,7 +89,7 @@
               "cacheWrite": 0
             },
             "contextWindow": 200000,
-            "maxTokens": 8192
+            "maxTokens": 512
           }
         ]
       }
@@ -122,6 +122,8 @@
       "subagents": {
         "maxConcurrent": 8
       },
+      "bootstrapMaxChars": 300,
+      "bootstrapTotalMaxChars": 600,
       "memorySearch": {
         "enabled": false
       }
@@ -132,7 +134,12 @@
         "default": false,
         "name": "Personal Assistant",
         "workspace": "/Users/bilal",
+        "skills": [],
         "tools": {
+          "profile": "minimal",
+          "alsoAllow": [
+            "exec"
+          ],
           "exec": {
             "host": "gateway",
             "security": "full",
@@ -155,10 +162,15 @@
           ]
         },
         "model": "openrouter/anthropic/claude-3.5-sonnet",
+        "skills": [],
         "identity": {
           "name": "Personal Assistant"
         },
         "tools": {
+          "profile": "minimal",
+          "alsoAllow": [
+            "exec"
+          ],
           "exec": {
             "host": "gateway",
             "security": "full",
@@ -579,7 +591,7 @@
       "enabled": true,
       "entries": {
         "session-memory": {
-          "enabled": true
+          "enabled": false
         }
       }
     }
@@ -633,6 +645,10 @@
     },
     "install": {
       "nodeManager": "npm"
+    },
+    "limits": {
+      "maxSkillsInPrompt": 2,
+      "maxSkillsPromptChars": 900
     },
     "entries": {
       "tkturners-memory": {

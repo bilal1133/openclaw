@@ -8,7 +8,7 @@
       "description": "Daily competitor scan + content plan + publish pack (direct orchestrator)",
       "enabled": true,
       "createdAtMs": 1771504821000,
-      "updatedAtMs": 1771568620288,
+      "updatedAtMs": 1771643821274,
       "schedule": {
         "kind": "cron",
         "expr": "0 8 * * *",
@@ -28,8 +28,11 @@
         "bestEffort": true
       },
       "state": {
-        "nextRunAtMs": 1771642800000,
-        "consecutiveErrors": 0
+        "nextRunAtMs": 1771729200000,
+        "consecutiveErrors": 0,
+        "lastRunAtMs": 1771642824955,
+        "lastStatus": "ok",
+        "lastDurationMs": 996319
       }
     },
     {
@@ -73,7 +76,7 @@
       "description": "Daily 7AM concise briefing (fast path)",
       "enabled": true,
       "createdAtMs": 1771512455692,
-      "updatedAtMs": 1771568620288,
+      "updatedAtMs": 1771640286294,
       "schedule": {
         "kind": "cron",
         "expr": "0 7 * * *",
@@ -93,8 +96,12 @@
         "bestEffort": true
       },
       "state": {
-        "consecutiveErrors": 0,
-        "nextRunAtMs": 1771639200000
+        "consecutiveErrors": 1,
+        "nextRunAtMs": 1771725600000,
+        "lastRunAtMs": 1771639234392,
+        "lastStatus": "error",
+        "lastDurationMs": 1051902,
+        "lastError": "Error: cron: job execution timed out"
       }
     },
     {
@@ -139,7 +146,7 @@
       "description": "2AM backup health check via script",
       "enabled": true,
       "createdAtMs": 1771512455692,
-      "updatedAtMs": 1771568620289,
+      "updatedAtMs": 1771621235527,
       "schedule": {
         "kind": "cron",
         "expr": "0 2 * * *",
@@ -160,8 +167,10 @@
       },
       "state": {
         "consecutiveErrors": 0,
-        "nextRunAtMs": 1771621200000,
-        "runningAtMs": 1771621200013
+        "nextRunAtMs": 1771707600000,
+        "lastRunAtMs": 1771621200017,
+        "lastStatus": "ok",
+        "lastDurationMs": 35510
       }
     },
     {

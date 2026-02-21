@@ -35,6 +35,7 @@ Usage:
   ghlctl.sh request --method <METHOD> --path </path> [--query "k=v&..."] [--data '<json>'] [--dry-run]
   ghlctl.sh get-location --location <id> [--dry-run]
   ghlctl.sh create-contact --location <id> [--first-name <v>] [--last-name <v>] [--email <v>] [--phone <v>] [--tags a,b] [--dry-run]
+  ghlctl.sh list-opportunities [--location <id>] [--limit <n>] [--pipeline-id <id>] [--status open|won|lost|abandoned|all] [--dry-run]
   ghlctl.sh get-opportunity --id <id> [--dry-run]
 
 Environment:
@@ -76,12 +77,8 @@ resolve_api_token() {
 }
 
 token_or_placeholder() {
-  local token=""
-  if token="$(resolve_api_token 2>/dev/null)"; then
-    printf '%s' "$token"
-  else
-    printf '%s' '${GHL_API_TOKEN}'
-  fi
+  # Never emit live tokens in dry-run output.
+  printf '%s' '${GHL_API_TOKEN}'
 }
 
 emit_curl() {
@@ -821,6 +818,53 @@ case "$cmd" in
     )"
 
     call_api POST "/contacts/" "" "$payload" "$dry_run" | render_output "$dry_run"
+    ;;
+
+  list-opportunities)
+    dry_run=0
+    location=""
+    limit="20"
+    pipeline_id=""
+    status="all"
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --location)
+          location="${2:-}"; shift 2 ;;
+        --limit)
+          limit="${2:-}"; shift 2 ;;
+        --pipeline-id)
+          pipeline_id="${2:-}"; shift 2 ;;
+        --status)
+          status="${2:-}"; shift 2 ;;
+        --dry-run)
+          dry_run=1; shift ;;
+        -h|--help)
+          usage; exit 0 ;;
+        *)
+          fail "unknown flag for list-opportunities: $1" ;;
+      esac
+    done
+
+    location="$(resolve_location "$location")"
+    [[ "$limit" =~ ^[0-9]+$ ]] || fail "--limit must be an integer"
+
+    case "$status" in
+      open|won|lost|abandoned|all)
+        ;;
+      *)
+        fail "--status must be one of: open|won|lost|abandoned|all"
+        ;;
+    esac
+
+    query="location_id=${location}&limit=${limit}"
+    if [[ -n "$pipeline_id" ]]; then
+      query="${query}&pipeline_id=${pipeline_id}"
+    fi
+    if [[ "$status" != "all" ]]; then
+      query="${query}&status=${status}"
+    fi
+
+    call_api GET "/opportunities/search" "$query" "" "$dry_run" | render_output "$dry_run"
     ;;
 
   get-opportunity)
