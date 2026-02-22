@@ -8,7 +8,7 @@
       "description": "Daily competitor scan + content plan + publish pack (direct orchestrator)",
       "enabled": true,
       "createdAtMs": 1771504821000,
-      "updatedAtMs": 1771643821274,
+      "updatedAtMs": 1771730596170,
       "schedule": {
         "kind": "cron",
         "expr": "0 8 * * *",
@@ -28,11 +28,12 @@
         "bestEffort": true
       },
       "state": {
-        "nextRunAtMs": 1771729200000,
-        "consecutiveErrors": 0,
-        "lastRunAtMs": 1771642824955,
-        "lastStatus": "ok",
-        "lastDurationMs": 996319
+        "nextRunAtMs": 1771815600000,
+        "consecutiveErrors": 1,
+        "lastRunAtMs": 1771729509397,
+        "lastStatus": "error",
+        "lastDurationMs": 1086773,
+        "lastError": "Error: cron: job execution timed out"
       }
     },
     {
@@ -42,7 +43,7 @@
       "description": "Evening recap + tomorrow plan (direct orchestrator)",
       "enabled": true,
       "createdAtMs": 1771509269862,
-      "updatedAtMs": 1771596082113,
+      "updatedAtMs": 1771768953188,
       "schedule": {
         "kind": "cron",
         "expr": "0 19 * * *",
@@ -62,10 +63,10 @@
         "bestEffort": true
       },
       "state": {
-        "nextRunAtMs": 1771682400000,
-        "lastRunAtMs": 1771596000019,
+        "nextRunAtMs": 1771855200000,
+        "lastRunAtMs": 1771768800028,
         "lastStatus": "ok",
-        "lastDurationMs": 82094,
+        "lastDurationMs": 153160,
         "consecutiveErrors": 0
       }
     },
@@ -76,7 +77,7 @@
       "description": "Daily 7AM concise briefing (fast path)",
       "enabled": true,
       "createdAtMs": 1771512455692,
-      "updatedAtMs": 1771640286294,
+      "updatedAtMs": 1771727524128,
       "schedule": {
         "kind": "cron",
         "expr": "0 7 * * *",
@@ -96,11 +97,11 @@
         "bestEffort": true
       },
       "state": {
-        "consecutiveErrors": 1,
-        "nextRunAtMs": 1771725600000,
-        "lastRunAtMs": 1771639234392,
+        "consecutiveErrors": 2,
+        "nextRunAtMs": 1771812000000,
+        "lastRunAtMs": 1771726471240,
         "lastStatus": "error",
-        "lastDurationMs": 1051902,
+        "lastDurationMs": 1052888,
         "lastError": "Error: cron: job execution timed out"
       }
     },
@@ -111,7 +112,7 @@
       "description": "Midnight daily tracker + memory update (fast path)",
       "enabled": true,
       "createdAtMs": 1771512455692,
-      "updatedAtMs": 1771615244417,
+      "updatedAtMs": 1771702121340,
       "schedule": {
         "kind": "cron",
         "expr": "0 0 * * *",
@@ -131,11 +132,11 @@
         "bestEffort": true
       },
       "state": {
-        "consecutiveErrors": 1,
-        "nextRunAtMs": 1771700400000,
-        "lastRunAtMs": 1771614311774,
+        "consecutiveErrors": 2,
+        "nextRunAtMs": 1771786800000,
+        "lastRunAtMs": 1771700897830,
         "lastStatus": "error",
-        "lastDurationMs": 932643,
+        "lastDurationMs": 1223510,
         "lastError": "Error: cron: job execution timed out"
       }
     },
@@ -146,7 +147,7 @@
       "description": "2AM backup health check via script",
       "enabled": true,
       "createdAtMs": 1771512455692,
-      "updatedAtMs": 1771621235527,
+      "updatedAtMs": 1771708399318,
       "schedule": {
         "kind": "cron",
         "expr": "0 2 * * *",
@@ -166,11 +167,12 @@
         "bestEffort": true
       },
       "state": {
-        "consecutiveErrors": 0,
-        "nextRunAtMs": 1771707600000,
-        "lastRunAtMs": 1771621200017,
-        "lastStatus": "ok",
-        "lastDurationMs": 35510
+        "consecutiveErrors": 1,
+        "nextRunAtMs": 1771794000000,
+        "lastRunAtMs": 1771707651546,
+        "lastStatus": "error",
+        "lastDurationMs": 747772,
+        "lastError": "Error: cron: job execution timed out"
       }
     },
     {
