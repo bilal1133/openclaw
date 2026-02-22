@@ -112,7 +112,7 @@
       "description": "Midnight daily tracker + memory update (fast path)",
       "enabled": true,
       "createdAtMs": 1771512455692,
-      "updatedAtMs": 1771702121340,
+      "updatedAtMs": 1771788814272,
       "schedule": {
         "kind": "cron",
         "expr": "0 0 * * *",
@@ -132,11 +132,11 @@
         "bestEffort": true
       },
       "state": {
-        "consecutiveErrors": 2,
-        "nextRunAtMs": 1771786800000,
-        "lastRunAtMs": 1771700897830,
+        "consecutiveErrors": 3,
+        "nextRunAtMs": 1771873200000,
+        "lastRunAtMs": 1771787605947,
         "lastStatus": "error",
-        "lastDurationMs": 1223510,
+        "lastDurationMs": 1208325,
         "lastError": "Error: cron: job execution timed out"
       }
     },
@@ -172,7 +172,7 @@
         "lastRunAtMs": 1771707651546,
         "lastStatus": "error",
         "lastDurationMs": 747772,
-        "lastError": "Error: cron: job execution timed out"
+        "runningAtMs": 1771794469623
       }
     },
     {
