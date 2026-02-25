@@ -8,7 +8,7 @@
       "description": "Daily competitor scan + content plan + publish pack (direct orchestrator)",
       "enabled": true,
       "createdAtMs": 1771504821000,
-      "updatedAtMs": 1771902282563,
+      "updatedAtMs": 1771988408483,
       "schedule": {
         "kind": "cron",
         "expr": "0 8 * * *",
@@ -28,11 +28,11 @@
         "bestEffort": true
       },
       "state": {
-        "nextRunAtMs": 1771988400000,
+        "nextRunAtMs": 1772074800000,
         "consecutiveErrors": 0,
-        "lastRunAtMs": 1771902263800,
+        "lastRunAtMs": 1771988400029,
         "lastStatus": "ok",
-        "lastDurationMs": 18763,
+        "lastDurationMs": 8454,
         "lastRunStatus": "ok",
         "lastDelivered": true,
         "lastDeliveryStatus": "delivered"
@@ -82,7 +82,7 @@
       "description": "Daily 7AM concise briefing (fast path)",
       "enabled": true,
       "createdAtMs": 1771512455692,
-      "updatedAtMs": 1771899165151,
+      "updatedAtMs": 1771984833771,
       "schedule": {
         "kind": "cron",
         "expr": "0 7 * * *",
@@ -103,13 +103,13 @@
       },
       "state": {
         "consecutiveErrors": 0,
-        "nextRunAtMs": 1771984800000,
-        "lastRunAtMs": 1771898874360,
+        "nextRunAtMs": 1772071200000,
+        "lastRunAtMs": 1771984800035,
         "lastStatus": "ok",
-        "lastDurationMs": 290791,
+        "lastDurationMs": 33736,
         "lastRunStatus": "ok",
-        "lastDelivered": false,
-        "lastDeliveryStatus": "not-delivered"
+        "lastDelivered": true,
+        "lastDeliveryStatus": "delivered"
       }
     },
     {
@@ -156,7 +156,7 @@
       "description": "2AM backup health check via script",
       "enabled": true,
       "createdAtMs": 1771512455692,
-      "updatedAtMs": 1771882194340,
+      "updatedAtMs": 1771967905343,
       "schedule": {
         "kind": "cron",
         "expr": "0 2 * * *",
@@ -176,14 +176,14 @@
         "bestEffort": true
       },
       "state": {
-        "consecutiveErrors": 1,
-        "nextRunAtMs": 1771966800000,
-        "lastRunAtMs": 1771881173465,
+        "consecutiveErrors": 2,
+        "nextRunAtMs": 1772053200000,
+        "lastRunAtMs": 1771966936300,
         "lastStatus": "error",
-        "lastDurationMs": 1020875,
+        "lastDurationMs": 969043,
         "lastRunStatus": "error",
         "lastDeliveryStatus": "unknown",
-        "runningAtMs": 1771966936299
+        "lastError": "cron: job execution timed out"
       }
     },
     {
