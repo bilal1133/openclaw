@@ -8,7 +8,7 @@
       "description": "Daily competitor scan + content plan + publish pack (direct orchestrator)",
       "enabled": true,
       "createdAtMs": 1771504821000,
-      "updatedAtMs": 1771988408483,
+      "updatedAtMs": 1772076072112,
       "schedule": {
         "kind": "cron",
         "expr": "0 8 * * *",
@@ -28,14 +28,14 @@
         "bestEffort": true
       },
       "state": {
-        "nextRunAtMs": 1772074800000,
-        "consecutiveErrors": 0,
-        "lastRunAtMs": 1771988400029,
-        "lastStatus": "ok",
-        "lastDurationMs": 8454,
-        "lastRunStatus": "ok",
-        "lastDelivered": true,
-        "lastDeliveryStatus": "delivered"
+        "nextRunAtMs": 1772161200000,
+        "consecutiveErrors": 1,
+        "lastRunAtMs": 1772075038172,
+        "lastStatus": "error",
+        "lastDurationMs": 1033940,
+        "lastRunStatus": "error",
+        "lastDeliveryStatus": "unknown",
+        "lastError": "cron: job execution timed out"
       }
     },
     {
@@ -45,7 +45,7 @@
       "description": "Evening recap + tomorrow plan (direct orchestrator)",
       "enabled": true,
       "createdAtMs": 1771509269862,
-      "updatedAtMs": 1771942489358,
+      "updatedAtMs": 1772114857772,
       "schedule": {
         "kind": "cron",
         "expr": "0 19 * * *",
@@ -65,10 +65,10 @@
         "bestEffort": true
       },
       "state": {
-        "nextRunAtMs": 1772028000000,
-        "lastRunAtMs": 1771942476372,
+        "nextRunAtMs": 1772200800000,
+        "lastRunAtMs": 1772114751778,
         "lastStatus": "ok",
-        "lastDurationMs": 12986,
+        "lastDurationMs": 105994,
         "consecutiveErrors": 0,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "delivered",
@@ -82,7 +82,7 @@
       "description": "Daily 7AM concise briefing (fast path)",
       "enabled": true,
       "createdAtMs": 1771512455692,
-      "updatedAtMs": 1771984833771,
+      "updatedAtMs": 1772073135086,
       "schedule": {
         "kind": "cron",
         "expr": "0 7 * * *",
@@ -102,14 +102,14 @@
         "bestEffort": true
       },
       "state": {
-        "consecutiveErrors": 0,
-        "nextRunAtMs": 1772071200000,
-        "lastRunAtMs": 1771984800035,
-        "lastStatus": "ok",
-        "lastDurationMs": 33736,
-        "lastRunStatus": "ok",
-        "lastDelivered": true,
-        "lastDeliveryStatus": "delivered"
+        "consecutiveErrors": 1,
+        "nextRunAtMs": 1772157600000,
+        "lastRunAtMs": 1772072115720,
+        "lastStatus": "error",
+        "lastDurationMs": 1019366,
+        "lastRunStatus": "error",
+        "lastDeliveryStatus": "unknown",
+        "lastError": "cron: job execution timed out"
       }
     },
     {
@@ -119,7 +119,7 @@
       "description": "Midnight daily tracker + memory update (fast path)",
       "enabled": true,
       "createdAtMs": 1771512455692,
-      "updatedAtMs": 1771959640934,
+      "updatedAtMs": 1772046108757,
       "schedule": {
         "kind": "cron",
         "expr": "0 0 * * *",
@@ -140,10 +140,10 @@
       },
       "state": {
         "consecutiveErrors": 0,
-        "nextRunAtMs": 1772046000000,
-        "lastRunAtMs": 1771959600293,
+        "nextRunAtMs": 1772132400000,
+        "lastRunAtMs": 1772046000026,
         "lastStatus": "ok",
-        "lastDurationMs": 40641,
+        "lastDurationMs": 108731,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "delivered",
         "lastDelivered": true
@@ -156,7 +156,7 @@
       "description": "2AM backup health check via script",
       "enabled": true,
       "createdAtMs": 1771512455692,
-      "updatedAtMs": 1771967905343,
+      "updatedAtMs": 1772054334208,
       "schedule": {
         "kind": "cron",
         "expr": "0 2 * * *",
@@ -176,11 +176,11 @@
         "bestEffort": true
       },
       "state": {
-        "consecutiveErrors": 2,
-        "nextRunAtMs": 1772053200000,
-        "lastRunAtMs": 1771966936300,
+        "consecutiveErrors": 3,
+        "nextRunAtMs": 1772139600000,
+        "lastRunAtMs": 1772053276188,
         "lastStatus": "error",
-        "lastDurationMs": 969043,
+        "lastDurationMs": 1058020,
         "lastRunStatus": "error",
         "lastDeliveryStatus": "unknown",
         "lastError": "cron: job execution timed out"
