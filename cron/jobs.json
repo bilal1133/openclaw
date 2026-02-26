@@ -119,7 +119,7 @@
       "description": "Midnight daily tracker + memory update (fast path)",
       "enabled": true,
       "createdAtMs": 1771512455692,
-      "updatedAtMs": 1772046108757,
+      "updatedAtMs": 1772132441534,
       "schedule": {
         "kind": "cron",
         "expr": "0 0 * * *",
@@ -140,10 +140,10 @@
       },
       "state": {
         "consecutiveErrors": 0,
-        "nextRunAtMs": 1772132400000,
-        "lastRunAtMs": 1772046000026,
+        "nextRunAtMs": 1772218800000,
+        "lastRunAtMs": 1772132400087,
         "lastStatus": "ok",
-        "lastDurationMs": 108731,
+        "lastDurationMs": 41447,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "delivered",
         "lastDelivered": true
@@ -183,7 +183,7 @@
         "lastDurationMs": 1058020,
         "lastRunStatus": "error",
         "lastDeliveryStatus": "unknown",
-        "lastError": "cron: job execution timed out"
+        "runningAtMs": 1772139600010
       }
     },
     {
