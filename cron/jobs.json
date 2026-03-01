@@ -8,7 +8,7 @@
       "description": "Daily competitor scan + content plan + publish pack (direct orchestrator)",
       "enabled": true,
       "createdAtMs": 1771504821000,
-      "updatedAtMs": 1772248054076,
+      "updatedAtMs": 1772336003217,
       "schedule": {
         "kind": "cron",
         "expr": "0 8 * * *",
@@ -28,14 +28,14 @@
         "bestEffort": true
       },
       "state": {
-        "nextRunAtMs": 1772334000000,
-        "consecutiveErrors": 0,
-        "lastRunAtMs": 1772248051729,
-        "lastStatus": "ok",
-        "lastDurationMs": 2347,
-        "lastRunStatus": "ok",
-        "lastDeliveryStatus": "delivered",
-        "lastDelivered": true
+        "nextRunAtMs": 1772420400000,
+        "consecutiveErrors": 1,
+        "lastRunAtMs": 1772334957218,
+        "lastStatus": "error",
+        "lastDurationMs": 1045999,
+        "lastRunStatus": "error",
+        "lastDeliveryStatus": "unknown",
+        "lastError": "cron: job execution timed out"
       }
     },
     {
@@ -45,7 +45,7 @@
       "description": "Evening recap + tomorrow plan (direct orchestrator)",
       "enabled": true,
       "createdAtMs": 1771509269862,
-      "updatedAtMs": 1772202361016,
+      "updatedAtMs": 1772288166639,
       "schedule": {
         "kind": "cron",
         "expr": "0 19 * * *",
@@ -65,14 +65,14 @@
         "bestEffort": true
       },
       "state": {
-        "nextRunAtMs": 1772287200000,
-        "lastRunAtMs": 1772200864567,
-        "lastStatus": "error",
-        "lastDurationMs": 1496449,
-        "consecutiveErrors": 1,
-        "lastRunStatus": "error",
-        "lastDeliveryStatus": "unknown",
-        "lastError": "cron: job execution timed out"
+        "nextRunAtMs": 1772373600000,
+        "lastRunAtMs": 1772288164052,
+        "lastStatus": "ok",
+        "lastDurationMs": 2587,
+        "consecutiveErrors": 0,
+        "lastRunStatus": "ok",
+        "lastDeliveryStatus": "delivered",
+        "lastDelivered": true
       }
     },
     {
@@ -82,7 +82,7 @@
       "description": "Daily 7AM concise briefing (fast path)",
       "enabled": true,
       "createdAtMs": 1771512455692,
-      "updatedAtMs": 1772244296321,
+      "updatedAtMs": 1772330412715,
       "schedule": {
         "kind": "cron",
         "expr": "0 7 * * *",
@@ -103,10 +103,10 @@
       },
       "state": {
         "consecutiveErrors": 0,
-        "nextRunAtMs": 1772330400000,
-        "lastRunAtMs": 1772244295499,
+        "nextRunAtMs": 1772416800000,
+        "lastRunAtMs": 1772330400037,
         "lastStatus": "ok",
-        "lastDurationMs": 822,
+        "lastDurationMs": 12678,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "delivered",
         "lastDelivered": true
@@ -119,7 +119,7 @@
       "description": "Midnight daily tracker + memory update (fast path)",
       "enabled": true,
       "createdAtMs": 1771512455692,
-      "updatedAtMs": 1772218836730,
+      "updatedAtMs": 1772305202234,
       "schedule": {
         "kind": "cron",
         "expr": "0 0 * * *",
@@ -140,10 +140,10 @@
       },
       "state": {
         "consecutiveErrors": 0,
-        "nextRunAtMs": 1772305200000,
-        "lastRunAtMs": 1772218800025,
+        "nextRunAtMs": 1772391600000,
+        "lastRunAtMs": 1772305200281,
         "lastStatus": "ok",
-        "lastDurationMs": 36705,
+        "lastDurationMs": 1953,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "delivered",
         "lastDelivered": true
@@ -156,7 +156,7 @@
       "description": "2AM backup health check via script",
       "enabled": true,
       "createdAtMs": 1771512455692,
-      "updatedAtMs": 1772226339359,
+      "updatedAtMs": 1772313285771,
       "schedule": {
         "kind": "cron",
         "expr": "0 2 * * *",
@@ -177,10 +177,10 @@
       },
       "state": {
         "consecutiveErrors": 0,
-        "nextRunAtMs": 1772312400000,
-        "lastRunAtMs": 1772226338272,
+        "nextRunAtMs": 1772398800000,
+        "lastRunAtMs": 1772313283789,
         "lastStatus": "ok",
-        "lastDurationMs": 1087,
+        "lastDurationMs": 1982,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "delivered",
         "lastDelivered": true
