@@ -8,7 +8,7 @@
       "description": "Daily competitor scan + content plan + publish pack (direct orchestrator)",
       "enabled": true,
       "createdAtMs": 1771504821000,
-      "updatedAtMs": 1772422582149,
+      "updatedAtMs": 1772507484828,
       "schedule": {
         "kind": "cron",
         "expr": "0 8 * * *",
@@ -28,14 +28,14 @@
         "bestEffort": true
       },
       "state": {
-        "nextRunAtMs": 1772506800000,
-        "consecutiveErrors": 2,
-        "lastRunAtMs": 1772421126852,
-        "lastStatus": "error",
-        "lastDurationMs": 1455297,
-        "lastRunStatus": "error",
-        "lastDeliveryStatus": "unknown",
-        "lastError": "cron: job execution timed out"
+        "nextRunAtMs": 1772593200000,
+        "consecutiveErrors": 0,
+        "lastRunAtMs": 1772507483560,
+        "lastStatus": "ok",
+        "lastDurationMs": 1268,
+        "lastRunStatus": "ok",
+        "lastDeliveryStatus": "delivered",
+        "lastDelivered": true
       }
     },
     {
@@ -82,7 +82,7 @@
       "description": "Daily 7AM concise briefing (fast path)",
       "enabled": true,
       "createdAtMs": 1771512455692,
-      "updatedAtMs": 1772417892054,
+      "updatedAtMs": 1772503935178,
       "schedule": {
         "kind": "cron",
         "expr": "0 7 * * *",
@@ -103,13 +103,13 @@
       },
       "state": {
         "consecutiveErrors": 0,
-        "nextRunAtMs": 1772503200000,
-        "lastRunAtMs": 1772417402569,
+        "nextRunAtMs": 1772589600000,
+        "lastRunAtMs": 1772503933973,
         "lastStatus": "ok",
-        "lastDurationMs": 489485,
+        "lastDurationMs": 1205,
         "lastRunStatus": "ok",
-        "lastDeliveryStatus": "not-delivered",
-        "lastDelivered": false
+        "lastDeliveryStatus": "delivered",
+        "lastDelivered": true
       }
     },
     {
@@ -156,7 +156,7 @@
       "description": "2AM backup health check via script",
       "enabled": true,
       "createdAtMs": 1771512455692,
-      "updatedAtMs": 1772399587202,
+      "updatedAtMs": 1772485551575,
       "schedule": {
         "kind": "cron",
         "expr": "0 2 * * *",
@@ -177,14 +177,13 @@
       },
       "state": {
         "consecutiveErrors": 0,
-        "nextRunAtMs": 1772485200000,
-        "lastRunAtMs": 1772398986842,
+        "nextRunAtMs": 1772571600000,
+        "lastRunAtMs": 1772485521581,
         "lastStatus": "ok",
-        "lastDurationMs": 600360,
+        "lastDurationMs": 29994,
         "lastRunStatus": "ok",
-        "lastDeliveryStatus": "not-delivered",
-        "lastDelivered": false,
-        "runningAtMs": 1772485521575
+        "lastDeliveryStatus": "delivered",
+        "lastDelivered": true
       }
     },
     {
