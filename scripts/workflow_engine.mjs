@@ -138,6 +138,41 @@ function renderTemplate(text, ctx) {
   return text.replace(/\{\{(\w+)\}\}/g, (_, key) => String(ctx[key] ?? ''));
 }
 
+function writeDeliverySummary(run, wf) {
+  const outPath = renderTemplate(wf.deliver?.summaryFile || path.join(OUTBOX_DIR, '{{runId}}.md'), {
+    runId: run.runId,
+    workflowId: run.workflowId,
+    task: run.context.task || '',
+    route: run.context.route || '',
+    brand_id: run.context.brand_id || '',
+    cadence: run.context.cadence || '',
+    run_date: run.context.run_date || '',
+    trigger_source: run.context.trigger_source || '',
+    approval_id: run.context.approval_id || ''
+  });
+  const lines = [
+    `# Workflow Run ${run.runId}`,
+    `- Workflow: ${run.workflowId}`,
+    `- Route: ${run.context.route}`,
+    `- Brand: ${run.context.brand_id || 'n/a'}`,
+    `- Cadence: ${run.context.cadence || 'n/a'}`,
+    `- Run Date: ${run.context.run_date || 'n/a'}`,
+    `- Trigger Source: ${run.context.trigger_source || 'n/a'}`,
+    `- Approval ID: ${run.context.approval_id || 'n/a'}`,
+    `- Task: ${run.context.task}`,
+    `- Status: ${run.status}`,
+    `- Updated: ${nowIso()}`,
+    '',
+    '## Execution',
+    '```',
+    String(run.context.execution?.stdout || 'n/a'),
+    '```'
+  ];
+  fs.mkdirSync(path.dirname(outPath), { recursive: true });
+  fs.writeFileSync(outPath, lines.join('\n'));
+  return { summaryFile: outPath };
+}
+
 function todayDate() {
   return new Date().toISOString().slice(0, 10);
 }
@@ -303,38 +338,7 @@ function runStage(run, wf, name) {
       output = { checks, ok: failed.length === 0 };
       if (!output.ok) throw new Error(`verify failed: missing ${failed.map((f) => f.file).join(', ')}`);
     } else if (name === 'deliver') {
-      const outPath = renderTemplate(wf.deliver?.summaryFile || path.join(OUTBOX_DIR, '{{runId}}.md'), {
-        runId: run.runId,
-        workflowId: run.workflowId,
-        task: run.context.task || '',
-        route: run.context.route || '',
-        brand_id: run.context.brand_id || '',
-        cadence: run.context.cadence || '',
-        run_date: run.context.run_date || '',
-        trigger_source: run.context.trigger_source || '',
-        approval_id: run.context.approval_id || ''
-      });
-      const lines = [
-        `# Workflow Run ${run.runId}`,
-        `- Workflow: ${run.workflowId}`,
-        `- Route: ${run.context.route}`,
-        `- Brand: ${run.context.brand_id || 'n/a'}`,
-        `- Cadence: ${run.context.cadence || 'n/a'}`,
-        `- Run Date: ${run.context.run_date || 'n/a'}`,
-        `- Trigger Source: ${run.context.trigger_source || 'n/a'}`,
-        `- Approval ID: ${run.context.approval_id || 'n/a'}`,
-        `- Task: ${run.context.task}`,
-        `- Status: ${run.status}`,
-        `- Updated: ${nowIso()}`,
-        '',
-        '## Execution',
-        '```',
-        String(run.context.execution?.stdout || 'n/a'),
-        '```'
-      ];
-      fs.mkdirSync(path.dirname(outPath), { recursive: true });
-      fs.writeFileSync(outPath, lines.join('\n'));
-      output = { summaryFile: outPath };
+      output = writeDeliverySummary(run, wf);
       run.context.delivery = output;
     } else if (name === 'log') {
       appendLog({
@@ -413,6 +417,10 @@ function runWorkflow(args) {
     }
     run.status = 'completed';
     saveRun(run);
+    if (run.context.delivery?.summaryFile) {
+      run.context.delivery = writeDeliverySummary(run, wf);
+      saveRun(run);
+    }
     const latest = loadIndex();
     latest.idempotency = latest.idempotency || {};
     latest.idempotency[run.idempotencyKey] = run.runId;

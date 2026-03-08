@@ -27,7 +27,7 @@ cat > "$PLIST_PATH" <<PLIST
   </dict>
 
   <key>StartInterval</key>
-  <integer>36000</integer>
+  <integer>300</integer>
 
   <key>RunAtLoad</key>
   <true/>

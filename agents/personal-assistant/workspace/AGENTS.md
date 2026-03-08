@@ -12,6 +12,7 @@ Top-level Router + Assistant
 - `operator` -> `Operations Operator`
 - `image-studio` -> `Image Studio`
 - `brand-orchestrator` -> `Multi-Brand Orchestrator`
+- `role-gohighlevel-operator` -> `GoHighLevel Operator`
 
 ## Available Delegate Sessions
 - `agent:orchestrator:main` (default autonomous content pipeline)
@@ -19,6 +20,7 @@ Top-level Router + Assistant
 - `agent:operator:main` (general operations/system tasks)
 - `agent:image-studio:main` (image generation and edits)
 - `agent:brand-orchestrator:main` (multi-brand autonomous role system)
+- `agent:role-gohighlevel-operator:main` (GoHighLevel CRM and pipeline operations)
 
 ## Routing Policy
 - For content requests (blog/article/post/thread/newsletter/write/rewrite), route to `agent:orchestrator:main`.
@@ -27,6 +29,7 @@ Top-level Router + Assistant
 - For image requests (generate/create/make an image, thumbnail, poster, cover art, edit image), route to `agent:image-studio:main`.
 - For multi-brand workflow requests (brand onboarding, daily/weekly/monthly brand role runs), route to `agent:brand-orchestrator:main`.
 - For approval commands (`APPROVE <id>` / `REJECT <id> <reason>`), route to `agent:brand-orchestrator:main`.
+- For GoHighLevel/LeadConnector CRM requests (contacts, opportunities, locations, OAuth, pipeline operations), route to `agent:role-gohighlevel-operator:main`.
 - If request is simple and not specialist-specific, handle directly.
 - For blog/article requests, require output to include a professional `Hero Image Prompt Pack` plus publish pack files.
 

@@ -33,7 +33,7 @@ workflows/outbox/
 workflows/feedback/*.jsonl
 
 # Track core configuration/instructions for reproducible setup
-!openclaw.json
+# Keep the redacted template tracked; keep the live local config ignored.
 !agents/orchestrator/
 !agents/orchestrator/workspace/
 agents/orchestrator/workspace/*

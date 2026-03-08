@@ -1,0 +1,29 @@
+{
+  "id": "f896a03f-c658-43c8-9538-e278f155b1b8",
+  "enqueuedAt": 1772708482332,
+  "channel": "whatsapp",
+  "to": "+923248473417",
+  "accountId": "default",
+  "payloads": [
+    {
+      "text": "HTTP 401: invalid api key (2049)",
+      "isError": true,
+      "replyToId": "fb073e39-5ca2-4690-a649-46758b091719",
+      "replyToTag": false,
+      "replyToCurrent": false,
+      "audioAsVoice": false
+    }
+  ],
+  "threadId": null,
+  "replyToId": "fb073e39-5ca2-4690-a649-46758b091719",
+  "mirror": {
+    "sessionKey": "agent:personal-assistant:main",
+    "agentId": "personal-assistant",
+    "text": "HTTP 401: invalid api key (2049)",
+    "mediaUrls": [],
+    "isGroup": false
+  },
+  "retryCount": 4,
+  "lastAttemptAt": 1772710148162,
+  "lastError": "No active WhatsApp Web listener (account: default). Start the gateway, then link WhatsApp with: openclaw channels login --channel whatsapp --account default."
+}

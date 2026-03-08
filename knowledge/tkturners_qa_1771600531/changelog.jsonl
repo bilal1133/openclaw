@@ -1,0 +1,7 @@
+{"ts":"2026-02-20T15:15:32Z","action":"append","brand":"tkturners_qa_1771600531","scope":"private","source":"/Users/bilal/.openclaw/knowledge/tkturners_qa_1771600531/source/legal.md","details":"id=tkm-3115828a2614 type=fact","agent":"memoryctl-import"}
+{"ts":"2026-02-20T15:15:32Z","action":"append","brand":"tkturners_qa_1771600531","scope":"shared","source":"/Users/bilal/.openclaw/knowledge/tkturners_qa_1771600531/source/strategy.md","details":"id=tkm-45513f341006 type=fact","agent":"memoryctl-import"}
+{"ts":"2026-02-20T15:15:32Z","action":"import","brand":"tkturners_qa_1771600531","scope":"shared","source":"/tmp/tkturners_qa_1771600531_input","details":"appended=2 deduped=0 skipped=0 files=2","agent":"memoryctl-import"}
+{"ts":"2026-02-20T15:15:32Z","action":"append","brand":"tkturners_qa_1771600531","scope":"shared","source":"/tmp/tkturners_qa_1771600531_input/strategy.md","details":"id=tkm-3068416d58e6 type=fact","agent":"qa-test"}
+{"ts":"2026-02-20T15:15:32Z","action":"append","brand":"tkturners_qa_1771600531","scope":"shared","source":"/tmp/tkturners_qa_1771600531_input/strategy.md","details":"id=tkm-096c7c25c796 type=fact","agent":"qa-b"}
+{"ts":"2026-02-20T15:15:32Z","action":"append","brand":"tkturners_qa_1771600531","scope":"shared","source":"/tmp/tkturners_qa_1771600531_input/strategy.md","details":"id=tkm-5c2dac5ff3d0 type=fact","agent":"qa-a"}
+{"ts":"2026-02-20T15:15:32Z","action":"compact","brand":"tkturners_qa_1771600531","scope":"both","source":"internal","details":"removed_shared=0 removed_private=0 total=0","agent":"memoryctl-compact"}

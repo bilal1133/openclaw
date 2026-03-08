@@ -1,0 +1,20 @@
+{
+  "id": "96356b50-c009-43cc-a731-3f73d4e4152b",
+  "enqueuedAt": 1772634105900,
+  "channel": "whatsapp",
+  "to": "+923248473417",
+  "payloads": [
+    {
+      "text": "403 Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/settings/keys"
+    }
+  ],
+  "threadId": null,
+  "mirror": {
+    "sessionKey": "agent:orchestrator:main",
+    "agentId": "orchestrator",
+    "text": "403 Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/settings/keys"
+  },
+  "retryCount": 5,
+  "lastAttemptAt": 1772708763973,
+  "lastError": "No active WhatsApp Web listener (account: default). Start the gateway, then link WhatsApp with: openclaw channels login --channel whatsapp --account default."
+}

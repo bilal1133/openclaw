@@ -38,8 +38,9 @@
 ## Recommended security
 - Use a **private repo**.
 - Review `.gitignore` and confirm no secrets are tracked.
-- If needed, move sensitive values out of `openclaw.json` before syncing.
-- Default tracked scope is intentionally narrow (`openclaw.json`, `agents/`, `scripts/`, docs).
+- Do not rely on `openclaw.json` being safe to sync; it may contain local auth/runtime secrets and is not part of the autosync safe-path allowlist.
+- If `openclaw.json` is already tracked, untrack it or move sensitive values out before syncing to a remote.
+- Default autosync scope is intentionally narrow (`agents/`, `scripts/`, `cron/jobs.json`, workflow definitions, and selected docs/templates).
 
 ## Logs
 - `logs/github-sync.log`

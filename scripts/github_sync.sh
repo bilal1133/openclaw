@@ -17,6 +17,10 @@ if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
   exit 1
 fi
 
+if git ls-files --error-unmatch openclaw.json >/dev/null 2>&1; then
+  log "WARN: openclaw.json is tracked by git; review and untrack it if it contains sensitive local auth or runtime settings"
+fi
+
 REMOTE_URL="${OPENCLAW_GITHUB_REMOTE:-}"
 BRANCH="${OPENCLAW_GITHUB_BRANCH:-main}"
 SAFE_PATHS=(
@@ -55,7 +59,7 @@ git config fetch.prune true
 if [[ -n "$(git status --porcelain)" ]]; then
   git add -A -- "${SAFE_PATHS[@]}" 2>/dev/null || true
   if [[ -n "$(git diff --cached --name-only)" ]]; then
-    if git diff --cached | rg -i '(sk-or-v1-|api[_-]?key|authorization:|bearer\s+[a-z0-9._-]+)' >/dev/null 2>&1; then
+    if git diff --cached | rg -i '(sk-or-v1-|api[_-]?key|authorization:|bearer\s+[a-z0-9._-]+|"token"\s*:\s*"[^"]+"|token\s*=\s*["'"'"']?[a-z0-9._-]{16,})' >/dev/null 2>&1; then
       log "ERROR: potential secret detected in staged diff; aborting sync commit"
       git reset >/dev/null 2>&1 || true
       exit 1
