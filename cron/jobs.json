@@ -24,8 +24,8 @@
       "delivery": {
         "mode": "announce",
         "channel": "whatsapp",
-        "to": "+923248473417",
-        "bestEffort": true
+        "bestEffort": true,
+        "to": "+923248473417"
       },
       "state": {
         "nextRunAtMs": 1773025200000,
@@ -47,7 +47,7 @@
       "description": "Evening recap + tomorrow plan (direct orchestrator)",
       "enabled": true,
       "createdAtMs": 1771509269862,
-      "updatedAtMs": 1772893417005,
+      "updatedAtMs": 1772978642950,
       "schedule": {
         "kind": "cron",
         "expr": "0 19 * * *",
@@ -63,20 +63,18 @@
       "delivery": {
         "mode": "announce",
         "channel": "whatsapp",
-        "to": "+923248473417",
-        "bestEffort": true
+        "bestEffort": true,
+        "to": "+923248473417"
       },
       "state": {
-        "nextRunAtMs": 1772978400000,
-        "lastRunAtMs": 1772892250684,
-        "lastStatus": "error",
-        "lastDurationMs": 1166321,
-        "consecutiveErrors": 4,
-        "lastRunStatus": "error",
-        "lastDeliveryStatus": "not-delivered",
-        "lastError": "403 Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/settings/keys",
-        "lastDelivered": false,
-        "lastDeliveryError": "403 Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/settings/keys"
+        "nextRunAtMs": 1773064800000,
+        "lastRunAtMs": 1772978400106,
+        "lastStatus": "ok",
+        "lastDurationMs": 242844,
+        "consecutiveErrors": 0,
+        "lastRunStatus": "ok",
+        "lastDeliveryStatus": "delivered",
+        "lastDelivered": true
       }
     },
     {
@@ -102,8 +100,8 @@
       "delivery": {
         "mode": "announce",
         "channel": "whatsapp",
-        "to": "+923248473417",
-        "bestEffort": true
+        "bestEffort": true,
+        "to": "+923248473417"
       },
       "state": {
         "consecutiveErrors": 4,
@@ -125,7 +123,7 @@
       "description": "Midnight daily tracker + memory update (fast path)",
       "enabled": true,
       "createdAtMs": 1771512455692,
-      "updatedAtMs": 1772910002682,
+      "updatedAtMs": 1772996562344,
       "schedule": {
         "kind": "cron",
         "expr": "0 0 * * *",
@@ -141,19 +139,18 @@
       "delivery": {
         "mode": "announce",
         "channel": "whatsapp",
-        "to": "+923248473417",
-        "bestEffort": true
+        "bestEffort": true,
+        "to": "+923248473417"
       },
       "state": {
-        "consecutiveErrors": 4,
-        "nextRunAtMs": 1772996400000,
-        "lastRunAtMs": 1772910000018,
-        "lastStatus": "error",
-        "lastDurationMs": 2664,
-        "lastRunStatus": "error",
+        "consecutiveErrors": 0,
+        "nextRunAtMs": 1773082800000,
+        "lastRunAtMs": 1772996400339,
+        "lastStatus": "ok",
+        "lastDurationMs": 162005,
+        "lastRunStatus": "ok",
         "lastDeliveryStatus": "delivered",
-        "lastDelivered": true,
-        "lastError": "403 Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/settings/keys"
+        "lastDelivered": true
       }
     },
     {
@@ -179,8 +176,8 @@
       "delivery": {
         "mode": "announce",
         "channel": "whatsapp",
-        "to": "+923248473417",
-        "bestEffort": true
+        "bestEffort": true,
+        "to": "+923248473417"
       },
       "state": {
         "consecutiveErrors": 4,
@@ -190,9 +187,9 @@
         "lastDurationMs": 2347301,
         "lastRunStatus": "error",
         "lastDeliveryStatus": "not-delivered",
-        "lastError": "403 Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/settings/keys",
         "lastDelivered": false,
-        "lastDeliveryError": "403 Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/settings/keys"
+        "lastDeliveryError": "403 Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/settings/keys",
+        "runningAtMs": 1773003913364
       }
     },
     {
@@ -218,8 +215,8 @@
       "delivery": {
         "mode": "announce",
         "channel": "whatsapp",
-        "to": "+923248473417",
-        "bestEffort": true
+        "bestEffort": true,
+        "to": "+923248473417"
       },
       "state": {
         "consecutiveErrors": 1,
@@ -254,8 +251,8 @@
       "delivery": {
         "mode": "announce",
         "channel": "whatsapp",
-        "to": "+923248473417",
-        "bestEffort": true
+        "bestEffort": true,
+        "to": "+923248473417"
       },
       "state": {
         "lastRunAtMs": 1772875225617,
@@ -290,8 +287,8 @@
       "delivery": {
         "mode": "announce",
         "channel": "whatsapp",
-        "to": "+923248473417",
-        "bestEffort": true
+        "bestEffort": true,
+        "to": "+923248473417"
       },
       "state": {
         "lastRunAtMs": 1772875274171,

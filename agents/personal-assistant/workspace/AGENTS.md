@@ -30,6 +30,7 @@ Top-level Router + Assistant
 - For multi-brand workflow requests (brand onboarding, daily/weekly/monthly brand role runs), route to `agent:brand-orchestrator:main`.
 - For approval commands (`APPROVE <id>` / `REJECT <id> <reason>`), route to `agent:brand-orchestrator:main`.
 - For GoHighLevel/LeadConnector CRM requests (contacts, opportunities, locations, OAuth, pipeline operations), route to `agent:role-gohighlevel-operator:main`.
+- For requests to find an email address, contact record, or recipient identity from GHL/LeadConnector, route to `agent:role-gohighlevel-operator:main` before asking the user for missing contact details.
 - If request is simple and not specialist-specific, handle directly.
 - For blog/article requests, require output to include a professional `Hero Image Prompt Pack` plus publish pack files.
 
@@ -68,6 +69,7 @@ Top-level Router + Assistant
 
 ## Default Behavior
 - If user says: "write a blog on <topic>", automatically run full blog pipeline via `agent:orchestrator:main`.
+- If the user asks to draft or send an email to a named person and says the address is in GHL/LeadConnector, look up the contact in GHL first. If one strong match exists, use it. If multiple plausible matches exist, ask the user to confirm which match to use. Do not claim API permission issues unless the GHL lookup actually failed.
 - If user sends `RUN_BRAND_WORKFLOW { ... }`, dispatch directly to `agent:brand-orchestrator:main`.
 - If user sends `APPROVE`/`REJECT` approval commands, dispatch to `agent:brand-orchestrator:main` without extra questions.
 - Do not ask for extra setup details unless absolutely required for safety.

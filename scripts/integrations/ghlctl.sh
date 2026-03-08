@@ -34,7 +34,38 @@ Usage:
   ghlctl.sh oauth-refresh --client-id <id> --client-secret <secret> [--refresh-token <token>] [--user-type Company|Location] [--env-file <abs_path>] [--show-tokens] [--dry-run]
   ghlctl.sh request --method <METHOD> --path </path> [--query "k=v&..."] [--data '<json>'] [--dry-run]
   ghlctl.sh get-location --location <id> [--dry-run]
+  ghlctl.sh get-contact --id <id> [--dry-run]
+  ghlctl.sh search-contacts [--location <id>] [--query <text> | --data '<json>'] [--page <n>] [--page-limit <n>] [--dry-run]
   ghlctl.sh create-contact --location <id> [--first-name <v>] [--last-name <v>] [--email <v>] [--phone <v>] [--tags a,b] [--dry-run]
+  ghlctl.sh update-contact --id <id> [--first-name <v>] [--last-name <v>] [--email <v>] [--phone <v>] [--tags a,b] [--company-name <v>] [--country <v>] [--dry-run]
+  ghlctl.sh list-contact-notes --contact-id <id> [--dry-run]
+  ghlctl.sh get-contact-note --contact-id <id> --note-id <id> [--dry-run]
+  ghlctl.sh create-contact-note --contact-id <id> --body <text> [--dry-run]
+  ghlctl.sh update-contact-note --contact-id <id> --note-id <id> --body <text> [--dry-run]
+  ghlctl.sh delete-contact-note --contact-id <id> --note-id <id> [--dry-run]
+  ghlctl.sh list-contact-tasks --contact-id <id> [--dry-run]
+  ghlctl.sh get-contact-task --contact-id <id> --task-id <id> [--dry-run]
+  ghlctl.sh create-contact-task --contact-id <id> --title <text> [--due-date <iso>] [--assigned-to <id>] [--completed true|false] [--dry-run]
+  ghlctl.sh update-contact-task --contact-id <id> --task-id <id> [--title <text>] [--due-date <iso>] [--assigned-to <id>] [--completed true|false] [--dry-run]
+  ghlctl.sh complete-contact-task --contact-id <id> --task-id <id> --completed true|false [--dry-run]
+  ghlctl.sh delete-contact-task --contact-id <id> --task-id <id> [--dry-run]
+  ghlctl.sh add-contact-to-workflow --contact-id <id> --workflow-id <id> [--dry-run]
+  ghlctl.sh remove-contact-from-workflow --contact-id <id> --workflow-id <id> [--dry-run]
+  ghlctl.sh list-forms [--location <id>] [--dry-run]
+  ghlctl.sh list-surveys [--location <id>] [--dry-run]
+  ghlctl.sh list-custom-fields [--location <id>] [--dry-run]
+  ghlctl.sh list-pipelines [--location <id>] [--dry-run]
+  ghlctl.sh list-calendars [--location <id>] [--dry-run]
+  ghlctl.sh list-users [--location <id>] [--dry-run]
+  ghlctl.sh get-calendar-slots --calendar-id <id> --start <ms|iso-date> --end <ms|iso-date> [--timezone <iana>] [--dry-run]
+  ghlctl.sh search-conversations [--location <id>] --query <text> [--dry-run]
+  ghlctl.sh list-conversation-messages --conversation-id <id> [--dry-run]
+  ghlctl.sh upload-conversation-attachments [--contact-id <id> | --conversation-id <id>] --file <path> [--file <path> ...] [--dry-run]
+  ghlctl.sh send-message --type <SMS|Email|WhatsApp|GMB|IG|FB|Custom> [--contact-id <id> | --conversation-id <id>] --message <text> [--subject <text>] [--html <text>] [--email-from <text>] [--attachments '<json-array>'] [--dry-run]
+  ghlctl.sh upsert-contact --location <id> [--first-name <v>] [--last-name <v>] [--email <v>] [--phone <v>] [--tags a,b] [--company-name <v>] [--country <v>] [--dry-run]
+  ghlctl.sh create-opportunity --location <id> --contact-id <id> --pipeline-id <id> --stage-id <id> --name <value> [--status <open|won|lost|abandoned>] [--value <number>] [--assigned-to <id>] [--source <value>] [--dry-run]
+  ghlctl.sh upsert-opportunity --location <id> [--id <id>] --contact-id <id> --pipeline-id <id> --stage-id <id> --name <value> [--status <open|won|lost|abandoned>] [--value <number>] [--assigned-to <id>] [--source <value>] [--dry-run]
+  ghlctl.sh list-workflows [--location <id>] [--dry-run]
   ghlctl.sh list-opportunities [--location <id>] [--limit <n>] [--pipeline-id <id>] [--status open|won|lost|abandoned|all] [--dry-run]
   ghlctl.sh get-opportunity --id <id> [--dry-run]
 
@@ -116,6 +147,39 @@ emit_curl() {
   printf '\n'
 }
 
+emit_multipart_curl() {
+  local url="$1"
+  shift
+
+  local token
+  token="$(token_or_placeholder)"
+
+  local -a cmd
+  cmd=(
+    curl
+    -sS
+    --max-time
+    "$GHL_TIMEOUT_SECONDS"
+    -X
+    POST
+    "$url"
+    -H
+    "Authorization: Bearer $token"
+    -H
+    "Version: $GHL_API_VERSION"
+    -H
+    "Accept: application/json"
+  )
+
+  while [[ $# -gt 0 ]]; do
+    cmd+=(-F "$1")
+    shift
+  done
+
+  printf '%q ' "${cmd[@]}"
+  printf '\n'
+}
+
 call_api() {
   local method="$1"
   local path="$2"
@@ -182,10 +246,113 @@ call_api() {
   rm -f "$response_file"
 }
 
+call_multipart_api() {
+  local path="$1"
+  shift
+
+  local url="${GHL_API_BASE}${path}"
+
+  if [[ "${1:-}" == "--dry-run-sentinel" ]]; then
+    shift
+    emit_multipart_curl "$url" "$@"
+    return 0
+  fi
+
+  local bearer_token=""
+  if ! bearer_token="$(resolve_api_token)"; then
+    fail "missing bearer token: set GHL_API_TOKEN (or GHL_ACCESS_TOKEN)"
+  fi
+
+  local response_file
+  local http_code
+  local -a cmd
+  cmd=(
+    curl
+    -sS
+    --max-time
+    "$GHL_TIMEOUT_SECONDS"
+    -X
+    POST
+    "$url"
+    -H
+    "Authorization: Bearer $bearer_token"
+    -H
+    "Version: $GHL_API_VERSION"
+    -H
+    "Accept: application/json"
+  )
+
+  while [[ $# -gt 0 ]]; do
+    cmd+=(-F "$1")
+    shift
+  done
+
+  response_file="$(mktemp)"
+  http_code="$("${cmd[@]}" -o "$response_file" -w "%{http_code}")"
+
+  if [[ ! "$http_code" =~ ^[0-9]{3}$ ]]; then
+    rm -f "$response_file"
+    fail "unexpected HTTP status code from API: $http_code"
+  fi
+
+  if (( http_code >= 400 )); then
+    echo "ghlctl: API request failed: http=$http_code method=POST path=$path" >&2
+    cat "$response_file" >&2
+    rm -f "$response_file"
+    return 11
+  fi
+
+  cat "$response_file"
+  rm -f "$response_file"
+}
+
 url_encode() {
   need_bin jq
   local value="$1"
   jq -nr --arg value "$value" '$value|@uri'
+}
+
+datetime_to_epoch_ms() {
+  local raw="$1"
+  local timezone="${2:-UTC}"
+
+  if [[ "$raw" =~ ^[0-9]{13}$ ]]; then
+    printf '%s' "$raw"
+    return 0
+  fi
+
+  if [[ "$raw" =~ ^[0-9]{10}$ ]]; then
+    printf '%s000' "$raw"
+    return 0
+  fi
+
+  command -v python3 >/dev/null 2>&1 || fail "python3 is required to convert date values"
+
+  python3 - "$raw" "$timezone" <<'PY'
+from datetime import datetime
+from zoneinfo import ZoneInfo
+import sys
+
+raw = sys.argv[1]
+timezone = sys.argv[2]
+
+try:
+    dt = datetime.fromisoformat(raw)
+except ValueError:
+    for fmt in ("%Y-%m-%d", "%Y-%m-%d %H:%M", "%Y-%m-%d %H:%M:%S"):
+        try:
+            dt = datetime.strptime(raw, fmt)
+            break
+        except ValueError:
+            dt = None
+    if dt is None:
+        raise
+
+if dt.tzinfo is None:
+    dt = dt.replace(tzinfo=ZoneInfo(timezone))
+
+print(int(dt.timestamp() * 1000))
+PY
 }
 
 normalize_user_type() {
@@ -199,6 +366,23 @@ normalize_user_type() {
       ;;
     *)
       fail "invalid --user-type: $raw (expected Company or Location)"
+      ;;
+  esac
+}
+
+normalize_bool() {
+  local raw="${1:-}"
+  local lowered
+  lowered="$(printf '%s' "$raw" | tr '[:upper:]' '[:lower:]')"
+  case "$lowered" in
+    true|1|yes|y)
+      printf '%s' "true"
+      ;;
+    false|0|no|n)
+      printf '%s' "false"
+      ;;
+    *)
+      fail "invalid boolean value: $raw (expected true or false)"
       ;;
   esac
 }
@@ -757,6 +941,95 @@ case "$cmd" in
     call_api GET "/locations/${location}" "" "" "$dry_run" | render_output "$dry_run"
     ;;
 
+  get-contact)
+    dry_run=0
+    contact_id=""
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --id)
+          contact_id="${2:-}"; shift 2 ;;
+        --dry-run)
+          dry_run=1; shift ;;
+        -h|--help)
+          usage; exit 0 ;;
+        *)
+          fail "unknown flag for get-contact: $1" ;;
+      esac
+    done
+
+    [[ -n "$contact_id" ]] || fail "--id is required"
+    call_api GET "/contacts/${contact_id}" "" "" "$dry_run" | render_output "$dry_run"
+    ;;
+
+  search-contacts)
+    need_bin jq
+    dry_run=0
+    location=""
+    query_text=""
+    data=""
+    page="1"
+    page_limit="20"
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --location)
+          location="${2:-}"; shift 2 ;;
+        --query)
+          query_text="${2:-}"; shift 2 ;;
+        --data)
+          data="${2:-}"; shift 2 ;;
+        --page)
+          page="${2:-}"; shift 2 ;;
+        --page-limit)
+          page_limit="${2:-}"; shift 2 ;;
+        --dry-run)
+          dry_run=1; shift ;;
+        -h|--help)
+          usage; exit 0 ;;
+        *)
+          fail "unknown flag for search-contacts: $1" ;;
+      esac
+    done
+
+    location="$(resolve_location "$location")"
+    [[ "$page" =~ ^[0-9]+$ ]] || fail "--page must be an integer"
+    [[ "$page_limit" =~ ^[0-9]+$ ]] || fail "--page-limit must be an integer"
+
+    if [[ -n "$query_text" && -n "$data" ]]; then
+      fail "search-contacts accepts either --query or --data, not both"
+    fi
+
+    if [[ -n "$data" ]]; then
+      payload="$(
+        jq -cn \
+          --argjson input "$data" \
+          --arg locationId "$location" \
+          --argjson page "$page" \
+          --argjson pageLimit "$page_limit" \
+          '$input
+          + (if ($input.locationId // "") == "" then {locationId: $locationId} else {} end)
+          + (if ($input.page // empty) == empty then {page: $page} else {} end)
+          + (if ($input.pageLimit // empty) == empty then {pageLimit: $pageLimit} else {} end)'
+      )"
+      call_api POST "/contacts/search" "" "$payload" "$dry_run" | render_output "$dry_run"
+    else
+      [[ -n "$query_text" ]] || fail "search-contacts requires --query or --data"
+      payload="$(
+        jq -cn \
+          --arg locationId "$location" \
+          --arg query "$query_text" \
+          --argjson page "$page" \
+          --argjson pageLimit "$page_limit" \
+          '{
+            locationId: $locationId,
+            page: $page,
+            pageLimit: $pageLimit,
+            query: $query
+          }'
+      )"
+      call_api POST "/contacts/search" "" "$payload" "$dry_run" | render_output "$dry_run"
+    fi
+    ;;
+
   create-contact)
     need_bin jq
     dry_run=0
@@ -818,6 +1091,1047 @@ case "$cmd" in
     )"
 
     call_api POST "/contacts/" "" "$payload" "$dry_run" | render_output "$dry_run"
+    ;;
+
+  update-contact)
+    need_bin jq
+    dry_run=0
+    contact_id=""
+    first_name=""
+    last_name=""
+    email=""
+    phone=""
+    tags=""
+    company_name=""
+    country=""
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --id)
+          contact_id="${2:-}"; shift 2 ;;
+        --first-name)
+          first_name="${2:-}"; shift 2 ;;
+        --last-name)
+          last_name="${2:-}"; shift 2 ;;
+        --email)
+          email="${2:-}"; shift 2 ;;
+        --phone)
+          phone="${2:-}"; shift 2 ;;
+        --tags)
+          tags="${2:-}"; shift 2 ;;
+        --company-name)
+          company_name="${2:-}"; shift 2 ;;
+        --country)
+          country="${2:-}"; shift 2 ;;
+        --dry-run)
+          dry_run=1; shift ;;
+        -h|--help)
+          usage; exit 0 ;;
+        *)
+          fail "unknown flag for update-contact: $1" ;;
+      esac
+    done
+
+    [[ -n "$contact_id" ]] || fail "--id is required"
+    if [[ -z "$first_name" && -z "$last_name" && -z "$email" && -z "$phone" && -z "$tags" && -z "$company_name" && -z "$country" ]]; then
+      fail "update-contact requires at least one field to change"
+    fi
+
+    payload="$(
+      jq -cn \
+        --arg firstName "$first_name" \
+        --arg lastName "$last_name" \
+        --arg email "$email" \
+        --arg phone "$phone" \
+        --arg tags "$tags" \
+        --arg companyName "$company_name" \
+        --arg country "$country" \
+        '(if $firstName != "" then {firstName: $firstName} else {} end)
+        + (if $lastName != "" then {lastName: $lastName} else {} end)
+        + (if $email != "" then {email: $email} else {} end)
+        + (if $phone != "" then {phone: $phone} else {} end)
+        + (if $companyName != "" then {companyName: $companyName} else {} end)
+        + (if $country != "" then {country: $country} else {} end)
+        + (
+            if $tags != ""
+            then {tags: ($tags | split(",") | map(gsub("^\\s+|\\s+$"; "")) | map(select(length > 0)))}
+            else {}
+            end
+          )'
+    )"
+
+    call_api PUT "/contacts/${contact_id}" "" "$payload" "$dry_run" | render_output "$dry_run"
+    ;;
+
+  upsert-contact)
+    need_bin jq
+    dry_run=0
+    location=""
+    first_name=""
+    last_name=""
+    email=""
+    phone=""
+    tags=""
+    company_name=""
+    country=""
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --location)
+          location="${2:-}"; shift 2 ;;
+        --first-name)
+          first_name="${2:-}"; shift 2 ;;
+        --last-name)
+          last_name="${2:-}"; shift 2 ;;
+        --email)
+          email="${2:-}"; shift 2 ;;
+        --phone)
+          phone="${2:-}"; shift 2 ;;
+        --tags)
+          tags="${2:-}"; shift 2 ;;
+        --company-name)
+          company_name="${2:-}"; shift 2 ;;
+        --country)
+          country="${2:-}"; shift 2 ;;
+        --dry-run)
+          dry_run=1; shift ;;
+        -h|--help)
+          usage; exit 0 ;;
+        *)
+          fail "unknown flag for upsert-contact: $1" ;;
+      esac
+    done
+
+    location="$(resolve_location "$location")"
+    if [[ -z "$email" && -z "$phone" ]]; then
+      fail "upsert-contact requires at least --email or --phone"
+    fi
+
+    payload="$(
+      jq -cn \
+        --arg locationId "$location" \
+        --arg firstName "$first_name" \
+        --arg lastName "$last_name" \
+        --arg email "$email" \
+        --arg phone "$phone" \
+        --arg tags "$tags" \
+        --arg companyName "$company_name" \
+        --arg country "$country" \
+        '{
+          locationId: $locationId
+        }
+        + (if $firstName != "" then {firstName: $firstName} else {} end)
+        + (if $lastName != "" then {lastName: $lastName} else {} end)
+        + (if $email != "" then {email: $email} else {} end)
+        + (if $phone != "" then {phone: $phone} else {} end)
+        + (if $companyName != "" then {companyName: $companyName} else {} end)
+        + (if $country != "" then {country: $country} else {} end)
+        + (
+            if $tags != ""
+            then {tags: ($tags | split(",") | map(gsub("^\\s+|\\s+$"; "")) | map(select(length > 0)))}
+            else {}
+            end
+          )'
+    )"
+
+    call_api POST "/contacts/upsert" "" "$payload" "$dry_run" | render_output "$dry_run"
+    ;;
+
+  list-contact-notes)
+    dry_run=0
+    contact_id=""
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --contact-id)
+          contact_id="${2:-}"; shift 2 ;;
+        --dry-run)
+          dry_run=1; shift ;;
+        -h|--help)
+          usage; exit 0 ;;
+        *)
+          fail "unknown flag for list-contact-notes: $1" ;;
+      esac
+    done
+
+    [[ -n "$contact_id" ]] || fail "--contact-id is required"
+    call_api GET "/contacts/${contact_id}/notes" "" "" "$dry_run" | render_output "$dry_run"
+    ;;
+
+  get-contact-note)
+    dry_run=0
+    contact_id=""
+    note_id=""
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --contact-id)
+          contact_id="${2:-}"; shift 2 ;;
+        --note-id)
+          note_id="${2:-}"; shift 2 ;;
+        --dry-run)
+          dry_run=1; shift ;;
+        -h|--help)
+          usage; exit 0 ;;
+        *)
+          fail "unknown flag for get-contact-note: $1" ;;
+      esac
+    done
+
+    [[ -n "$contact_id" ]] || fail "--contact-id is required"
+    [[ -n "$note_id" ]] || fail "--note-id is required"
+    call_api GET "/contacts/${contact_id}/notes/${note_id}" "" "" "$dry_run" | render_output "$dry_run"
+    ;;
+
+  create-contact-note)
+    need_bin jq
+    dry_run=0
+    contact_id=""
+    body=""
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --contact-id)
+          contact_id="${2:-}"; shift 2 ;;
+        --body)
+          body="${2:-}"; shift 2 ;;
+        --dry-run)
+          dry_run=1; shift ;;
+        -h|--help)
+          usage; exit 0 ;;
+        *)
+          fail "unknown flag for create-contact-note: $1" ;;
+      esac
+    done
+
+    [[ -n "$contact_id" ]] || fail "--contact-id is required"
+    [[ -n "$body" ]] || fail "--body is required"
+
+    payload="$(jq -cn --arg body "$body" '{body: $body}')"
+    call_api POST "/contacts/${contact_id}/notes" "" "$payload" "$dry_run" | render_output "$dry_run"
+    ;;
+
+  update-contact-note)
+    need_bin jq
+    dry_run=0
+    contact_id=""
+    note_id=""
+    body=""
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --contact-id)
+          contact_id="${2:-}"; shift 2 ;;
+        --note-id)
+          note_id="${2:-}"; shift 2 ;;
+        --body)
+          body="${2:-}"; shift 2 ;;
+        --dry-run)
+          dry_run=1; shift ;;
+        -h|--help)
+          usage; exit 0 ;;
+        *)
+          fail "unknown flag for update-contact-note: $1" ;;
+      esac
+    done
+
+    [[ -n "$contact_id" ]] || fail "--contact-id is required"
+    [[ -n "$note_id" ]] || fail "--note-id is required"
+    [[ -n "$body" ]] || fail "--body is required"
+
+    payload="$(jq -cn --arg body "$body" '{body: $body}')"
+    call_api PUT "/contacts/${contact_id}/notes/${note_id}" "" "$payload" "$dry_run" | render_output "$dry_run"
+    ;;
+
+  delete-contact-note)
+    dry_run=0
+    contact_id=""
+    note_id=""
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --contact-id)
+          contact_id="${2:-}"; shift 2 ;;
+        --note-id)
+          note_id="${2:-}"; shift 2 ;;
+        --dry-run)
+          dry_run=1; shift ;;
+        -h|--help)
+          usage; exit 0 ;;
+        *)
+          fail "unknown flag for delete-contact-note: $1" ;;
+      esac
+    done
+
+    [[ -n "$contact_id" ]] || fail "--contact-id is required"
+    [[ -n "$note_id" ]] || fail "--note-id is required"
+    call_api DELETE "/contacts/${contact_id}/notes/${note_id}" "" "" "$dry_run" | render_output "$dry_run"
+    ;;
+
+  list-contact-tasks)
+    dry_run=0
+    contact_id=""
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --contact-id)
+          contact_id="${2:-}"; shift 2 ;;
+        --dry-run)
+          dry_run=1; shift ;;
+        -h|--help)
+          usage; exit 0 ;;
+        *)
+          fail "unknown flag for list-contact-tasks: $1" ;;
+      esac
+    done
+
+    [[ -n "$contact_id" ]] || fail "--contact-id is required"
+    call_api GET "/contacts/${contact_id}/tasks" "" "" "$dry_run" | render_output "$dry_run"
+    ;;
+
+  get-contact-task)
+    dry_run=0
+    contact_id=""
+    task_id=""
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --contact-id)
+          contact_id="${2:-}"; shift 2 ;;
+        --task-id)
+          task_id="${2:-}"; shift 2 ;;
+        --dry-run)
+          dry_run=1; shift ;;
+        -h|--help)
+          usage; exit 0 ;;
+        *)
+          fail "unknown flag for get-contact-task: $1" ;;
+      esac
+    done
+
+    [[ -n "$contact_id" ]] || fail "--contact-id is required"
+    [[ -n "$task_id" ]] || fail "--task-id is required"
+    call_api GET "/contacts/${contact_id}/tasks/${task_id}" "" "" "$dry_run" | render_output "$dry_run"
+    ;;
+
+  create-contact-task)
+    need_bin jq
+    dry_run=0
+    contact_id=""
+    title=""
+    due_date=""
+    assigned_to=""
+    completed=""
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --contact-id)
+          contact_id="${2:-}"; shift 2 ;;
+        --title)
+          title="${2:-}"; shift 2 ;;
+        --due-date)
+          due_date="${2:-}"; shift 2 ;;
+        --assigned-to)
+          assigned_to="${2:-}"; shift 2 ;;
+        --completed)
+          completed="${2:-}"; shift 2 ;;
+        --dry-run)
+          dry_run=1; shift ;;
+        -h|--help)
+          usage; exit 0 ;;
+        *)
+          fail "unknown flag for create-contact-task: $1" ;;
+      esac
+    done
+
+    [[ -n "$contact_id" ]] || fail "--contact-id is required"
+    [[ -n "$title" ]] || fail "--title is required"
+    if [[ -n "$completed" ]]; then
+      completed="$(normalize_bool "$completed")"
+    fi
+
+    payload="$(
+      jq -cn \
+        --arg title "$title" \
+        --arg dueDate "$due_date" \
+        --arg assignedTo "$assigned_to" \
+        --arg completed "$completed" \
+        '{title: $title}
+        + (if $dueDate != "" then {dueDate: $dueDate} else {} end)
+        + (if $assignedTo != "" then {assignedTo: $assignedTo} else {} end)
+        + (if $completed != "" then {completed: ($completed == "true")} else {} end)'
+    )"
+
+    call_api POST "/contacts/${contact_id}/tasks" "" "$payload" "$dry_run" | render_output "$dry_run"
+    ;;
+
+  update-contact-task)
+    need_bin jq
+    dry_run=0
+    contact_id=""
+    task_id=""
+    title=""
+    due_date=""
+    assigned_to=""
+    completed=""
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --contact-id)
+          contact_id="${2:-}"; shift 2 ;;
+        --task-id)
+          task_id="${2:-}"; shift 2 ;;
+        --title)
+          title="${2:-}"; shift 2 ;;
+        --due-date)
+          due_date="${2:-}"; shift 2 ;;
+        --assigned-to)
+          assigned_to="${2:-}"; shift 2 ;;
+        --completed)
+          completed="${2:-}"; shift 2 ;;
+        --dry-run)
+          dry_run=1; shift ;;
+        -h|--help)
+          usage; exit 0 ;;
+        *)
+          fail "unknown flag for update-contact-task: $1" ;;
+      esac
+    done
+
+    [[ -n "$contact_id" ]] || fail "--contact-id is required"
+    [[ -n "$task_id" ]] || fail "--task-id is required"
+    if [[ -n "$completed" ]]; then
+      completed="$(normalize_bool "$completed")"
+    fi
+    if [[ -z "$title" && -z "$due_date" && -z "$assigned_to" && -z "$completed" ]]; then
+      fail "update-contact-task requires at least one field to change"
+    fi
+
+    payload="$(
+      jq -cn \
+        --arg title "$title" \
+        --arg dueDate "$due_date" \
+        --arg assignedTo "$assigned_to" \
+        --arg completed "$completed" \
+        '(if $title != "" then {title: $title} else {} end)
+        + (if $dueDate != "" then {dueDate: $dueDate} else {} end)
+        + (if $assignedTo != "" then {assignedTo: $assignedTo} else {} end)
+        + (if $completed != "" then {completed: ($completed == "true")} else {} end)'
+    )"
+
+    call_api PUT "/contacts/${contact_id}/tasks/${task_id}" "" "$payload" "$dry_run" | render_output "$dry_run"
+    ;;
+
+  complete-contact-task)
+    need_bin jq
+    dry_run=0
+    contact_id=""
+    task_id=""
+    completed=""
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --contact-id)
+          contact_id="${2:-}"; shift 2 ;;
+        --task-id)
+          task_id="${2:-}"; shift 2 ;;
+        --completed)
+          completed="${2:-}"; shift 2 ;;
+        --dry-run)
+          dry_run=1; shift ;;
+        -h|--help)
+          usage; exit 0 ;;
+        *)
+          fail "unknown flag for complete-contact-task: $1" ;;
+      esac
+    done
+
+    [[ -n "$contact_id" ]] || fail "--contact-id is required"
+    [[ -n "$task_id" ]] || fail "--task-id is required"
+    [[ -n "$completed" ]] || fail "--completed is required"
+    completed="$(normalize_bool "$completed")"
+
+    payload="$(jq -cn --arg completed "$completed" '{completed: ($completed == "true")}')"
+    call_api PUT "/contacts/${contact_id}/tasks/${task_id}/completed" "" "$payload" "$dry_run" | render_output "$dry_run"
+    ;;
+
+  delete-contact-task)
+    dry_run=0
+    contact_id=""
+    task_id=""
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --contact-id)
+          contact_id="${2:-}"; shift 2 ;;
+        --task-id)
+          task_id="${2:-}"; shift 2 ;;
+        --dry-run)
+          dry_run=1; shift ;;
+        -h|--help)
+          usage; exit 0 ;;
+        *)
+          fail "unknown flag for delete-contact-task: $1" ;;
+      esac
+    done
+
+    [[ -n "$contact_id" ]] || fail "--contact-id is required"
+    [[ -n "$task_id" ]] || fail "--task-id is required"
+    call_api DELETE "/contacts/${contact_id}/tasks/${task_id}" "" "" "$dry_run" | render_output "$dry_run"
+    ;;
+
+  add-contact-to-workflow)
+    dry_run=0
+    contact_id=""
+    workflow_id=""
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --contact-id)
+          contact_id="${2:-}"; shift 2 ;;
+        --workflow-id)
+          workflow_id="${2:-}"; shift 2 ;;
+        --dry-run)
+          dry_run=1; shift ;;
+        -h|--help)
+          usage; exit 0 ;;
+        *)
+          fail "unknown flag for add-contact-to-workflow: $1" ;;
+      esac
+    done
+
+    [[ -n "$contact_id" ]] || fail "--contact-id is required"
+    [[ -n "$workflow_id" ]] || fail "--workflow-id is required"
+    call_api POST "/contacts/${contact_id}/workflow/${workflow_id}" "" "" "$dry_run" | render_output "$dry_run"
+    ;;
+
+  remove-contact-from-workflow)
+    dry_run=0
+    contact_id=""
+    workflow_id=""
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --contact-id)
+          contact_id="${2:-}"; shift 2 ;;
+        --workflow-id)
+          workflow_id="${2:-}"; shift 2 ;;
+        --dry-run)
+          dry_run=1; shift ;;
+        -h|--help)
+          usage; exit 0 ;;
+        *)
+          fail "unknown flag for remove-contact-from-workflow: $1" ;;
+      esac
+    done
+
+    [[ -n "$contact_id" ]] || fail "--contact-id is required"
+    [[ -n "$workflow_id" ]] || fail "--workflow-id is required"
+    call_api DELETE "/contacts/${contact_id}/workflow/${workflow_id}" "" "" "$dry_run" | render_output "$dry_run"
+    ;;
+
+  list-forms)
+    dry_run=0
+    location=""
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --location)
+          location="${2:-}"; shift 2 ;;
+        --dry-run)
+          dry_run=1; shift ;;
+        -h|--help)
+          usage; exit 0 ;;
+        *)
+          fail "unknown flag for list-forms: $1" ;;
+      esac
+    done
+
+    location="$(resolve_location "$location")"
+    call_api GET "/forms/" "locationId=${location}" "" "$dry_run" | render_output "$dry_run"
+    ;;
+
+  list-surveys)
+    dry_run=0
+    location=""
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --location)
+          location="${2:-}"; shift 2 ;;
+        --dry-run)
+          dry_run=1; shift ;;
+        -h|--help)
+          usage; exit 0 ;;
+        *)
+          fail "unknown flag for list-surveys: $1" ;;
+      esac
+    done
+
+    location="$(resolve_location "$location")"
+    call_api GET "/surveys/" "locationId=${location}" "" "$dry_run" | render_output "$dry_run"
+    ;;
+
+  list-custom-fields)
+    dry_run=0
+    location=""
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --location)
+          location="${2:-}"; shift 2 ;;
+        --dry-run)
+          dry_run=1; shift ;;
+        -h|--help)
+          usage; exit 0 ;;
+        *)
+          fail "unknown flag for list-custom-fields: $1" ;;
+      esac
+    done
+
+    location="$(resolve_location "$location")"
+    call_api GET "/locations/${location}/customFields" "" "" "$dry_run" | render_output "$dry_run"
+    ;;
+
+  list-pipelines)
+    dry_run=0
+    location=""
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --location)
+          location="${2:-}"; shift 2 ;;
+        --dry-run)
+          dry_run=1; shift ;;
+        -h|--help)
+          usage; exit 0 ;;
+        *)
+          fail "unknown flag for list-pipelines: $1" ;;
+      esac
+    done
+
+    location="$(resolve_location "$location")"
+    call_api GET "/opportunities/pipelines" "locationId=${location}" "" "$dry_run" | render_output "$dry_run"
+    ;;
+
+  list-calendars)
+    dry_run=0
+    location=""
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --location)
+          location="${2:-}"; shift 2 ;;
+        --dry-run)
+          dry_run=1; shift ;;
+        -h|--help)
+          usage; exit 0 ;;
+        *)
+          fail "unknown flag for list-calendars: $1" ;;
+      esac
+    done
+
+    location="$(resolve_location "$location")"
+    call_api GET "/calendars/" "locationId=${location}" "" "$dry_run" | render_output "$dry_run"
+    ;;
+
+  list-users)
+    dry_run=0
+    location=""
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --location)
+          location="${2:-}"; shift 2 ;;
+        --dry-run)
+          dry_run=1; shift ;;
+        -h|--help)
+          usage; exit 0 ;;
+        *)
+          fail "unknown flag for list-users: $1" ;;
+      esac
+    done
+
+    location="$(resolve_location "$location")"
+    call_api GET "/users/" "locationId=${location}" "" "$dry_run" | render_output "$dry_run"
+    ;;
+
+  get-calendar-slots)
+    dry_run=0
+    calendar_id=""
+    start_raw=""
+    end_raw=""
+    timezone="${TZ:-UTC}"
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --calendar-id)
+          calendar_id="${2:-}"; shift 2 ;;
+        --start)
+          start_raw="${2:-}"; shift 2 ;;
+        --end)
+          end_raw="${2:-}"; shift 2 ;;
+        --timezone)
+          timezone="${2:-}"; shift 2 ;;
+        --dry-run)
+          dry_run=1; shift ;;
+        -h|--help)
+          usage; exit 0 ;;
+        *)
+          fail "unknown flag for get-calendar-slots: $1" ;;
+      esac
+    done
+
+    [[ -n "$calendar_id" ]] || fail "--calendar-id is required"
+    [[ -n "$start_raw" ]] || fail "--start is required"
+    [[ -n "$end_raw" ]] || fail "--end is required"
+
+    start_ms="$(datetime_to_epoch_ms "$start_raw" "$timezone")"
+    end_ms="$(datetime_to_epoch_ms "$end_raw" "$timezone")"
+    call_api GET "/calendars/${calendar_id}/free-slots" "startDate=${start_ms}&endDate=${end_ms}&timezone=$(url_encode "$timezone")" "" "$dry_run" | render_output "$dry_run"
+    ;;
+
+  search-conversations)
+    dry_run=0
+    location=""
+    query_text=""
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --location)
+          location="${2:-}"; shift 2 ;;
+        --query)
+          query_text="${2:-}"; shift 2 ;;
+        --dry-run)
+          dry_run=1; shift ;;
+        -h|--help)
+          usage; exit 0 ;;
+        *)
+          fail "unknown flag for search-conversations: $1" ;;
+      esac
+    done
+
+    location="$(resolve_location "$location")"
+    [[ -n "$query_text" ]] || fail "--query is required"
+    encoded_query="$(url_encode "$query_text")"
+    call_api GET "/conversations/search" "locationId=${location}&query=${encoded_query}" "" "$dry_run" | render_output "$dry_run"
+    ;;
+
+  list-conversation-messages)
+    dry_run=0
+    conversation_id=""
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --conversation-id)
+          conversation_id="${2:-}"; shift 2 ;;
+        --dry-run)
+          dry_run=1; shift ;;
+        -h|--help)
+          usage; exit 0 ;;
+        *)
+          fail "unknown flag for list-conversation-messages: $1" ;;
+      esac
+    done
+
+    [[ -n "$conversation_id" ]] || fail "--conversation-id is required"
+    call_api GET "/conversations/${conversation_id}/messages" "" "" "$dry_run" | render_output "$dry_run"
+    ;;
+
+  upload-conversation-attachments)
+    dry_run=0
+    contact_id=""
+    conversation_id=""
+    files=()
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --contact-id)
+          contact_id="${2:-}"; shift 2 ;;
+        --conversation-id)
+          conversation_id="${2:-}"; shift 2 ;;
+        --file)
+          files+=("${2:-}"); shift 2 ;;
+        --dry-run)
+          dry_run=1; shift ;;
+        -h|--help)
+          usage; exit 0 ;;
+        *)
+          fail "unknown flag for upload-conversation-attachments: $1" ;;
+      esac
+    done
+
+    if [[ -z "$contact_id" && -z "$conversation_id" ]]; then
+      fail "upload-conversation-attachments requires --contact-id or --conversation-id"
+    fi
+    if [[ -n "$contact_id" && -n "$conversation_id" ]]; then
+      fail "upload-conversation-attachments accepts either --contact-id or --conversation-id, not both"
+    fi
+    ((${#files[@]} > 0)) || fail "upload-conversation-attachments requires at least one --file"
+    ((${#files[@]} <= 5)) || fail "upload-conversation-attachments supports at most 5 files per request"
+
+    form_fields=()
+    if [[ -n "$contact_id" ]]; then
+      form_fields+=("contactId=${contact_id}")
+    fi
+    if [[ -n "$conversation_id" ]]; then
+      form_fields+=("conversationId=${conversation_id}")
+    fi
+
+    for file_path in "${files[@]}"; do
+      [[ -f "$file_path" ]] || fail "file does not exist: $file_path"
+      form_fields+=("attachments=@${file_path}")
+    done
+
+    if [[ "$dry_run" == "1" ]]; then
+      call_multipart_api "/conversations/messages/upload" --dry-run-sentinel "${form_fields[@]}"
+    else
+      call_multipart_api "/conversations/messages/upload" "${form_fields[@]}" | render_output 0
+    fi
+    ;;
+
+  send-message)
+    need_bin jq
+    dry_run=0
+    message_type=""
+    contact_id=""
+    conversation_id=""
+    message=""
+    subject=""
+    html=""
+    email_from=""
+    attachments=""
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --type)
+          message_type="${2:-}"; shift 2 ;;
+        --contact-id)
+          contact_id="${2:-}"; shift 2 ;;
+        --conversation-id)
+          conversation_id="${2:-}"; shift 2 ;;
+        --message)
+          message="${2:-}"; shift 2 ;;
+        --subject)
+          subject="${2:-}"; shift 2 ;;
+        --html)
+          html="${2:-}"; shift 2 ;;
+        --email-from)
+          email_from="${2:-}"; shift 2 ;;
+        --attachments)
+          attachments="${2:-}"; shift 2 ;;
+        --dry-run)
+          dry_run=1; shift ;;
+        -h|--help)
+          usage; exit 0 ;;
+        *)
+          fail "unknown flag for send-message: $1" ;;
+      esac
+    done
+
+    [[ -n "$message_type" ]] || fail "--type is required"
+    [[ -n "$message" ]] || fail "--message is required"
+    if [[ -z "$contact_id" && -z "$conversation_id" ]]; then
+      fail "send-message requires --contact-id or --conversation-id"
+    fi
+    if [[ -n "$contact_id" && -n "$conversation_id" ]]; then
+      fail "send-message accepts either --contact-id or --conversation-id, not both"
+    fi
+
+    payload="$(
+      jq -cn \
+        --arg type "$message_type" \
+        --arg contactId "$contact_id" \
+        --arg conversationId "$conversation_id" \
+        --arg message "$message" \
+        --arg subject "$subject" \
+        --arg html "$html" \
+        --arg emailFrom "$email_from" \
+        --arg attachments "$attachments" \
+        '{
+          type: $type,
+          message: $message
+        }
+        + (if $contactId != "" then {contactId: $contactId} else {} end)
+        + (if $conversationId != "" then {conversationId: $conversationId} else {} end)
+        + (if $subject != "" then {subject: $subject} else {} end)
+        + (if $html != "" then {html: $html} else {} end)
+        + (if $emailFrom != "" then {emailFrom: $emailFrom} else {} end)
+        + (if $attachments != "" then {attachments: ($attachments | fromjson)} else {} end)'
+    )"
+
+    call_api POST "/conversations/messages" "" "$payload" "$dry_run" | render_output "$dry_run"
+    ;;
+
+  create-opportunity)
+    need_bin jq
+    dry_run=0
+    location=""
+    contact_id=""
+    pipeline_id=""
+    stage_id=""
+    name=""
+    status="open"
+    monetary_value=""
+    assigned_to=""
+    source=""
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --location)
+          location="${2:-}"; shift 2 ;;
+        --contact-id)
+          contact_id="${2:-}"; shift 2 ;;
+        --pipeline-id)
+          pipeline_id="${2:-}"; shift 2 ;;
+        --stage-id)
+          stage_id="${2:-}"; shift 2 ;;
+        --name)
+          name="${2:-}"; shift 2 ;;
+        --status)
+          status="${2:-}"; shift 2 ;;
+        --value)
+          monetary_value="${2:-}"; shift 2 ;;
+        --assigned-to)
+          assigned_to="${2:-}"; shift 2 ;;
+        --source)
+          source="${2:-}"; shift 2 ;;
+        --dry-run)
+          dry_run=1; shift ;;
+        -h|--help)
+          usage; exit 0 ;;
+        *)
+          fail "unknown flag for create-opportunity: $1" ;;
+      esac
+    done
+
+    location="$(resolve_location "$location")"
+    [[ -n "$contact_id" ]] || fail "--contact-id is required"
+    [[ -n "$pipeline_id" ]] || fail "--pipeline-id is required"
+    [[ -n "$stage_id" ]] || fail "--stage-id is required"
+    [[ -n "$name" ]] || fail "--name is required"
+
+    case "$status" in
+      open|won|lost|abandoned)
+        ;;
+      *)
+        fail "--status must be one of: open|won|lost|abandoned"
+        ;;
+    esac
+
+    if [[ -n "$monetary_value" && ! "$monetary_value" =~ ^-?[0-9]+([.][0-9]+)?$ ]]; then
+      fail "--value must be numeric"
+    fi
+
+    payload="$(
+      jq -cn \
+        --arg locationId "$location" \
+        --arg contactId "$contact_id" \
+        --arg pipelineId "$pipeline_id" \
+        --arg pipelineStageId "$stage_id" \
+        --arg name "$name" \
+        --arg status "$status" \
+        --arg assignedTo "$assigned_to" \
+        --arg source "$source" \
+        --arg monetaryValue "$monetary_value" \
+        '{
+          locationId: $locationId,
+          contactId: $contactId,
+          pipelineId: $pipelineId,
+          pipelineStageId: $pipelineStageId,
+          name: $name,
+          status: $status
+        }
+        + (if $assignedTo != "" then {assignedTo: $assignedTo} else {} end)
+        + (if $source != "" then {source: $source} else {} end)
+        + (if $monetaryValue != "" then {monetaryValue: ($monetaryValue | tonumber)} else {} end)'
+    )"
+
+    call_api POST "/opportunities/" "" "$payload" "$dry_run" | render_output "$dry_run"
+    ;;
+
+  upsert-opportunity)
+    need_bin jq
+    dry_run=0
+    location=""
+    opportunity_id=""
+    contact_id=""
+    pipeline_id=""
+    stage_id=""
+    name=""
+    status="open"
+    monetary_value=""
+    assigned_to=""
+    source=""
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --location)
+          location="${2:-}"; shift 2 ;;
+        --id)
+          opportunity_id="${2:-}"; shift 2 ;;
+        --contact-id)
+          contact_id="${2:-}"; shift 2 ;;
+        --pipeline-id)
+          pipeline_id="${2:-}"; shift 2 ;;
+        --stage-id)
+          stage_id="${2:-}"; shift 2 ;;
+        --name)
+          name="${2:-}"; shift 2 ;;
+        --status)
+          status="${2:-}"; shift 2 ;;
+        --value)
+          monetary_value="${2:-}"; shift 2 ;;
+        --assigned-to)
+          assigned_to="${2:-}"; shift 2 ;;
+        --source)
+          source="${2:-}"; shift 2 ;;
+        --dry-run)
+          dry_run=1; shift ;;
+        -h|--help)
+          usage; exit 0 ;;
+        *)
+          fail "unknown flag for upsert-opportunity: $1" ;;
+      esac
+    done
+
+    location="$(resolve_location "$location")"
+    [[ -n "$contact_id" ]] || fail "--contact-id is required"
+    [[ -n "$pipeline_id" ]] || fail "--pipeline-id is required"
+    [[ -n "$stage_id" ]] || fail "--stage-id is required"
+    [[ -n "$name" ]] || fail "--name is required"
+
+    case "$status" in
+      open|won|lost|abandoned)
+        ;;
+      *)
+        fail "--status must be one of: open|won|lost|abandoned"
+        ;;
+    esac
+
+    if [[ -n "$monetary_value" && ! "$monetary_value" =~ ^-?[0-9]+([.][0-9]+)?$ ]]; then
+      fail "--value must be numeric"
+    fi
+
+    payload="$(
+      jq -cn \
+        --arg locationId "$location" \
+        --arg id "$opportunity_id" \
+        --arg contactId "$contact_id" \
+        --arg pipelineId "$pipeline_id" \
+        --arg pipelineStageId "$stage_id" \
+        --arg name "$name" \
+        --arg status "$status" \
+        --arg assignedTo "$assigned_to" \
+        --arg source "$source" \
+        --arg monetaryValue "$monetary_value" \
+        '{
+          locationId: $locationId,
+          contactId: $contactId,
+          pipelineId: $pipelineId,
+          pipelineStageId: $pipelineStageId,
+          name: $name,
+          status: $status
+        }
+        + (if $id != "" then {id: $id} else {} end)
+        + (if $assignedTo != "" then {assignedTo: $assignedTo} else {} end)
+        + (if $source != "" then {source: $source} else {} end)
+        + (if $monetaryValue != "" then {monetaryValue: ($monetaryValue | tonumber)} else {} end)'
+    )"
+
+    call_api POST "/opportunities/upsert" "" "$payload" "$dry_run" | render_output "$dry_run"
+    ;;
+
+  list-workflows)
+    dry_run=0
+    location=""
+    while [[ $# -gt 0 ]]; do
+      case "$1" in
+        --location)
+          location="${2:-}"; shift 2 ;;
+        --dry-run)
+          dry_run=1; shift ;;
+        -h|--help)
+          usage; exit 0 ;;
+        *)
+          fail "unknown flag for list-workflows: $1" ;;
+      esac
+    done
+
+    location="$(resolve_location "$location")"
+    call_api GET "/workflows/" "locationId=${location}" "" "$dry_run" | render_output "$dry_run"
     ;;
 
   list-opportunities)
