@@ -8,7 +8,7 @@
       "description": "Daily competitor scan + content plan + publish pack (direct orchestrator)",
       "enabled": true,
       "createdAtMs": 1771504821000,
-      "updatedAtMs": 1772941842495,
+      "updatedAtMs": 1773026937068,
       "schedule": {
         "kind": "cron",
         "expr": "0 8 * * *",
@@ -28,16 +28,14 @@
         "to": "+923248473417"
       },
       "state": {
-        "nextRunAtMs": 1773025200000,
-        "consecutiveErrors": 4,
-        "lastRunAtMs": 1772939669275,
-        "lastStatus": "error",
-        "lastDurationMs": 2173220,
-        "lastRunStatus": "error",
-        "lastDeliveryStatus": "not-delivered",
-        "lastError": "403 Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/settings/keys",
-        "lastDelivered": false,
-        "lastDeliveryError": "403 Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/settings/keys"
+        "nextRunAtMs": 1773111600000,
+        "consecutiveErrors": 0,
+        "lastRunAtMs": 1773025856427,
+        "lastStatus": "ok",
+        "lastDurationMs": 1080641,
+        "lastRunStatus": "ok",
+        "lastDeliveryStatus": "delivered",
+        "lastDelivered": true
       }
     },
     {
@@ -84,7 +82,7 @@
       "description": "Daily 7AM concise briefing (fast path)",
       "enabled": true,
       "createdAtMs": 1771512455692,
-      "updatedAtMs": 1772937630306,
+      "updatedAtMs": 1773022213120,
       "schedule": {
         "kind": "cron",
         "expr": "0 7 * * *",
@@ -104,16 +102,14 @@
         "to": "+923248473417"
       },
       "state": {
-        "consecutiveErrors": 4,
-        "nextRunAtMs": 1773021600000,
-        "lastRunAtMs": 1772935763278,
-        "lastStatus": "error",
-        "lastDurationMs": 1867028,
-        "lastRunStatus": "error",
-        "lastDeliveryStatus": "not-delivered",
-        "lastDelivered": false,
-        "lastDeliveryError": "403 Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/settings/keys",
-        "lastError": "403 Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/settings/keys"
+        "consecutiveErrors": 0,
+        "nextRunAtMs": 1773108000000,
+        "lastRunAtMs": 1773022184436,
+        "lastStatus": "ok",
+        "lastDurationMs": 28684,
+        "lastRunStatus": "ok",
+        "lastDeliveryStatus": "delivered",
+        "lastDelivered": true
       }
     },
     {
@@ -160,7 +156,7 @@
       "description": "2AM backup health check via script",
       "enabled": true,
       "createdAtMs": 1771512455692,
-      "updatedAtMs": 1772920327121,
+      "updatedAtMs": 1773003948900,
       "schedule": {
         "kind": "cron",
         "expr": "0 2 * * *",
@@ -180,16 +176,14 @@
         "to": "+923248473417"
       },
       "state": {
-        "consecutiveErrors": 4,
-        "nextRunAtMs": 1773003600000,
-        "lastRunAtMs": 1772917979820,
-        "lastStatus": "error",
-        "lastDurationMs": 2347301,
-        "lastRunStatus": "error",
-        "lastDeliveryStatus": "not-delivered",
-        "lastDelivered": false,
-        "lastDeliveryError": "403 Key limit exceeded (monthly limit). Manage it using https://openrouter.ai/settings/keys",
-        "runningAtMs": 1773003913364
+        "consecutiveErrors": 0,
+        "nextRunAtMs": 1773090000000,
+        "lastRunAtMs": 1773003913383,
+        "lastStatus": "ok",
+        "lastDurationMs": 35517,
+        "lastRunStatus": "ok",
+        "lastDeliveryStatus": "delivered",
+        "lastDelivered": true
       }
     },
     {
@@ -199,7 +193,7 @@
       "description": "Weekly trend scan across Reddit, YouTube, X",
       "enabled": true,
       "createdAtMs": 1771512455692,
-      "updatedAtMs": 1772425214366,
+      "updatedAtMs": 1773030577420,
       "schedule": {
         "kind": "cron",
         "expr": "0 9 * * 1",
@@ -219,14 +213,14 @@
         "to": "+923248473417"
       },
       "state": {
-        "consecutiveErrors": 1,
-        "nextRunAtMs": 1773028800000,
-        "lastRunAtMs": 1772424607666,
-        "lastStatus": "error",
-        "lastDurationMs": 606700,
-        "lastRunStatus": "error",
-        "lastError": "cron: job execution timed out",
-        "lastDeliveryStatus": "unknown"
+        "consecutiveErrors": 0,
+        "nextRunAtMs": 1773633600000,
+        "lastRunAtMs": 1773029575824,
+        "lastStatus": "ok",
+        "lastDurationMs": 1001596,
+        "lastRunStatus": "ok",
+        "lastDeliveryStatus": "delivered",
+        "lastDelivered": true
       }
     },
     {
