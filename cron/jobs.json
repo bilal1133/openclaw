@@ -8,7 +8,7 @@
       "description": "Daily competitor scan + content plan + publish pack (direct orchestrator)",
       "enabled": true,
       "createdAtMs": 1771504821000,
-      "updatedAtMs": 1773115260897,
+      "updatedAtMs": 1773202008983,
       "schedule": {
         "kind": "cron",
         "expr": "0 8 * * *",
@@ -28,14 +28,15 @@
         "to": "+923248473417"
       },
       "state": {
-        "nextRunAtMs": 1773198000000,
-        "consecutiveErrors": 1,
-        "lastRunAtMs": 1773111601352,
+        "nextRunAtMs": 1773284400000,
+        "consecutiveErrors": 2,
+        "lastRunAtMs": 1773198475260,
         "lastStatus": "error",
-        "lastDurationMs": 3659545,
+        "lastDurationMs": 3533723,
         "lastRunStatus": "error",
-        "lastDeliveryStatus": "unknown",
-        "lastError": "cron: job execution timed out"
+        "lastDeliveryStatus": "delivered",
+        "lastError": "Request timed out before a response was generated. Please try again, or increase `agents.defaults.timeoutSeconds` in your config.",
+        "lastDelivered": true
       }
     },
     {
@@ -82,7 +83,7 @@
       "description": "Daily 7AM concise briefing (fast path)",
       "enabled": true,
       "createdAtMs": 1771512455692,
-      "updatedAtMs": 1773108683159,
+      "updatedAtMs": 1773198473102,
       "schedule": {
         "kind": "cron",
         "expr": "0 7 * * *",
@@ -102,15 +103,14 @@
         "to": "+923248473417"
       },
       "state": {
-        "consecutiveErrors": 1,
-        "nextRunAtMs": 1773194400000,
-        "lastRunAtMs": 1773108069015,
+        "consecutiveErrors": 2,
+        "nextRunAtMs": 1773280800000,
+        "lastRunAtMs": 1773194812491,
         "lastStatus": "error",
-        "lastDurationMs": 614144,
+        "lastDurationMs": 3660611,
         "lastRunStatus": "error",
-        "lastDeliveryStatus": "delivered",
-        "lastDelivered": true,
-        "lastError": "Request timed out before a response was generated. Please try again, or increase `agents.defaults.timeoutSeconds` in your config."
+        "lastDeliveryStatus": "unknown",
+        "lastError": "cron: job execution timed out"
       }
     },
     {
@@ -157,7 +157,7 @@
       "description": "2AM backup health check via script",
       "enabled": true,
       "createdAtMs": 1771512455692,
-      "updatedAtMs": 1773094028862,
+      "updatedAtMs": 1773176471289,
       "schedule": {
         "kind": "cron",
         "expr": "0 2 * * *",
@@ -177,14 +177,14 @@
         "to": "+923248473417"
       },
       "state": {
-        "consecutiveErrors": 1,
-        "nextRunAtMs": 1773176400000,
-        "lastRunAtMs": 1773090368889,
-        "lastStatus": "error",
-        "lastDurationMs": 3659973,
-        "lastRunStatus": "error",
-        "lastDeliveryStatus": "unknown",
-        "runningAtMs": 1773176400016
+        "consecutiveErrors": 0,
+        "nextRunAtMs": 1773262800000,
+        "lastRunAtMs": 1773176400037,
+        "lastStatus": "ok",
+        "lastDurationMs": 71252,
+        "lastRunStatus": "ok",
+        "lastDeliveryStatus": "delivered",
+        "lastDelivered": true
       }
     },
     {
