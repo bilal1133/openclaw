@@ -46,7 +46,7 @@
       "description": "Evening recap + tomorrow plan (direct orchestrator)",
       "enabled": true,
       "createdAtMs": 1771509269862,
-      "updatedAtMs": 1773156070142,
+      "updatedAtMs": 1773240017712,
       "schedule": {
         "kind": "cron",
         "expr": "0 19 * * *",
@@ -66,14 +66,16 @@
         "to": "+923248473417"
       },
       "state": {
-        "nextRunAtMs": 1773237600000,
-        "lastRunAtMs": 1773152182264,
+        "nextRunAtMs": 1773324000000,
+        "lastRunAtMs": 1773237986577,
         "lastStatus": "error",
-        "lastDurationMs": 3887878,
-        "consecutiveErrors": 1,
+        "lastDurationMs": 2031135,
+        "consecutiveErrors": 2,
         "lastRunStatus": "error",
-        "lastDeliveryStatus": "unknown",
-        "lastError": "cron: job execution timed out"
+        "lastDeliveryStatus": "not-delivered",
+        "lastError": "Request timed out before a response was generated. Please try again, or increase `agents.defaults.timeoutSeconds` in your config.",
+        "lastDelivered": false,
+        "lastDeliveryError": "Request timed out before a response was generated. Please try again, or increase `agents.defaults.timeoutSeconds` in your config."
       }
     },
     {
@@ -120,7 +122,7 @@
       "description": "Midnight daily tracker + memory update (fast path)",
       "enabled": true,
       "createdAtMs": 1771512455692,
-      "updatedAtMs": 1773169419655,
+      "updatedAtMs": 1773255760574,
       "schedule": {
         "kind": "cron",
         "expr": "0 0 * * *",
@@ -141,10 +143,10 @@
       },
       "state": {
         "consecutiveErrors": 0,
-        "nextRunAtMs": 1773255600000,
-        "lastRunAtMs": 1773169200613,
+        "nextRunAtMs": 1773342000000,
+        "lastRunAtMs": 1773255600488,
         "lastStatus": "ok",
-        "lastDurationMs": 219042,
+        "lastDurationMs": 160086,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "delivered",
         "lastDelivered": true
@@ -184,7 +186,8 @@
         "lastDurationMs": 71252,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "delivered",
-        "lastDelivered": true
+        "lastDelivered": true,
+        "runningAtMs": 1773262875707
       }
     },
     {
