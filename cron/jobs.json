@@ -8,7 +8,7 @@
       "description": "Daily competitor scan + content plan + publish pack (direct orchestrator)",
       "enabled": true,
       "createdAtMs": 1771504821000,
-      "updatedAtMs": 1773202008983,
+      "updatedAtMs": 1773289705509,
       "schedule": {
         "kind": "cron",
         "expr": "0 8 * * *",
@@ -28,15 +28,14 @@
         "to": "+923248473417"
       },
       "state": {
-        "nextRunAtMs": 1773284400000,
-        "consecutiveErrors": 2,
-        "lastRunAtMs": 1773198475260,
+        "nextRunAtMs": 1773370800000,
+        "consecutiveErrors": 3,
+        "lastRunAtMs": 1773285693135,
         "lastStatus": "error",
-        "lastDurationMs": 3533723,
+        "lastDurationMs": 4012374,
         "lastRunStatus": "error",
-        "lastDeliveryStatus": "delivered",
-        "lastError": "Request timed out before a response was generated. Please try again, or increase `agents.defaults.timeoutSeconds` in your config.",
-        "lastDelivered": true
+        "lastDeliveryStatus": "unknown",
+        "lastError": "cron: job execution timed out"
       }
     },
     {
@@ -85,7 +84,7 @@
       "description": "Daily 7AM concise briefing (fast path)",
       "enabled": true,
       "createdAtMs": 1771512455692,
-      "updatedAtMs": 1773198473102,
+      "updatedAtMs": 1773285690881,
       "schedule": {
         "kind": "cron",
         "expr": "0 7 * * *",
@@ -105,11 +104,11 @@
         "to": "+923248473417"
       },
       "state": {
-        "consecutiveErrors": 2,
-        "nextRunAtMs": 1773280800000,
-        "lastRunAtMs": 1773194812491,
+        "consecutiveErrors": 3,
+        "nextRunAtMs": 1773367200000,
+        "lastRunAtMs": 1773281727823,
         "lastStatus": "error",
-        "lastDurationMs": 3660611,
+        "lastDurationMs": 3963058,
         "lastRunStatus": "error",
         "lastDeliveryStatus": "unknown",
         "lastError": "cron: job execution timed out"
@@ -159,7 +158,7 @@
       "description": "2AM backup health check via script",
       "enabled": true,
       "createdAtMs": 1771512455692,
-      "updatedAtMs": 1773176471289,
+      "updatedAtMs": 1773262922811,
       "schedule": {
         "kind": "cron",
         "expr": "0 2 * * *",
@@ -180,14 +179,13 @@
       },
       "state": {
         "consecutiveErrors": 0,
-        "nextRunAtMs": 1773262800000,
-        "lastRunAtMs": 1773176400037,
+        "nextRunAtMs": 1773349200000,
+        "lastRunAtMs": 1773262875718,
         "lastStatus": "ok",
-        "lastDurationMs": 71252,
+        "lastDurationMs": 47093,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "delivered",
-        "lastDelivered": true,
-        "runningAtMs": 1773262875707
+        "lastDelivered": true
       }
     },
     {
