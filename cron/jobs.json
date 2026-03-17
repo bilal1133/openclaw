@@ -28,14 +28,14 @@
         "to": "+923248473417"
       },
       "state": {
-        "nextRunAtMs": 1773370800000,
+        "nextRunAtMs": 1773802800000,
         "consecutiveErrors": 3,
         "lastRunAtMs": 1773285693135,
         "lastStatus": "error",
         "lastDurationMs": 4012374,
         "lastRunStatus": "error",
         "lastDeliveryStatus": "unknown",
-        "lastError": "cron: job execution timed out"
+        "runningAtMs": 1773774870246
       }
     },
     {
@@ -45,7 +45,7 @@
       "description": "Evening recap + tomorrow plan (direct orchestrator)",
       "enabled": true,
       "createdAtMs": 1771509269862,
-      "updatedAtMs": 1773240017712,
+      "updatedAtMs": 1773324331127,
       "schedule": {
         "kind": "cron",
         "expr": "0 19 * * *",
@@ -65,16 +65,15 @@
         "to": "+923248473417"
       },
       "state": {
-        "nextRunAtMs": 1773324000000,
-        "lastRunAtMs": 1773237986577,
+        "nextRunAtMs": 1773842400000,
+        "lastRunAtMs": 1773324009666,
         "lastStatus": "error",
-        "lastDurationMs": 2031135,
-        "consecutiveErrors": 2,
+        "lastDurationMs": 321461,
+        "consecutiveErrors": 3,
         "lastRunStatus": "error",
-        "lastDeliveryStatus": "not-delivered",
-        "lastError": "Request timed out before a response was generated. Please try again, or increase `agents.defaults.timeoutSeconds` in your config.",
-        "lastDelivered": false,
-        "lastDeliveryError": "Request timed out before a response was generated. Please try again, or increase `agents.defaults.timeoutSeconds` in your config."
+        "lastDeliveryStatus": "delivered",
+        "lastDelivered": true,
+        "runningAtMs": 1773774870246
       }
     },
     {
@@ -105,13 +104,13 @@
       },
       "state": {
         "consecutiveErrors": 3,
-        "nextRunAtMs": 1773367200000,
+        "nextRunAtMs": 1773799200000,
         "lastRunAtMs": 1773281727823,
         "lastStatus": "error",
         "lastDurationMs": 3963058,
         "lastRunStatus": "error",
         "lastDeliveryStatus": "unknown",
-        "lastError": "cron: job execution timed out"
+        "runningAtMs": 1773774870246
       }
     },
     {
@@ -142,13 +141,14 @@
       },
       "state": {
         "consecutiveErrors": 0,
-        "nextRunAtMs": 1773342000000,
+        "nextRunAtMs": 1773860400000,
         "lastRunAtMs": 1773255600488,
         "lastStatus": "ok",
         "lastDurationMs": 160086,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "delivered",
-        "lastDelivered": true
+        "lastDelivered": true,
+        "runningAtMs": 1773774870246
       }
     },
     {
@@ -179,13 +179,14 @@
       },
       "state": {
         "consecutiveErrors": 0,
-        "nextRunAtMs": 1773349200000,
+        "nextRunAtMs": 1773781200000,
         "lastRunAtMs": 1773262875718,
         "lastStatus": "ok",
         "lastDurationMs": 47093,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "delivered",
-        "lastDelivered": true
+        "lastDelivered": true,
+        "runningAtMs": 1773774870246
       }
     },
     {
@@ -216,13 +217,14 @@
       },
       "state": {
         "consecutiveErrors": 0,
-        "nextRunAtMs": 1773633600000,
+        "nextRunAtMs": 1774238400000,
         "lastRunAtMs": 1773029575824,
         "lastStatus": "ok",
         "lastDurationMs": 1001596,
         "lastRunStatus": "ok",
         "lastDeliveryStatus": "delivered",
-        "lastDelivered": true
+        "lastDelivered": true,
+        "runningAtMs": 1773774870246
       }
     },
     {
